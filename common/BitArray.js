@@ -246,13 +246,6 @@ ZXing.Common.BitArray.prototype.Equals = function (o) {
     }
     return true;
 };
-ZXing.Common.BitArray.prototype.GetHashCode = function () {
-    var hash = this.size;
-    for (var $i2 = 0, $t2 = this.bits, $l2 = $t2.length, bit = $t2[$i2]; $i2 < $l2; $i2++, bit = $t2[$i2]) {
-        hash = 31 * hash + bit.GetHashCode();
-    }
-    return hash;
-};
 ZXing.Common.BitArray.prototype.toString = function () {
     var result = "";
     for (var i = 0; i < this.size; i++) {

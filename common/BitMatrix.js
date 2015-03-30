@@ -290,16 +290,6 @@ ZXing.Common.BitMatrix.prototype.Equals = function (obj) {
     }
     return true;
 };
-ZXing.Common.BitMatrix.prototype.GetHashCode = function () {
-    var hash = this.width;
-    hash = 31 * hash + this.width;
-    hash = 31 * hash + this.height;
-    hash = 31 * hash + this.rowSize;
-    for (var $i3 = 0, $t3 = this.bits, $l3 = $t3.length, bit = $t3[$i3]; $i3 < $l3; $i3++, bit = $t3[$i3]) {
-        hash = 31 * hash + bit.GetHashCode();
-    }
-    return hash;
-};
 ZXing.Common.BitMatrix.prototype.toString = function () {
     return this.ToString("X ", "  ", "\n");
 };
@@ -319,15 +309,3 @@ ZXing.Common.BitMatrix.prototype.ToString = function (setString, unsetString, li
 ZXing.Common.BitMatrix.prototype.Clone = function () {
     return new ZXing.Common.BitMatrix(this.width, this.height, this.rowSize, this.bits.slice(0));
 };
-ZXing.Common.BitMatrix.prototype.ToBitmap = function () {
-    //return this.ToBitmap(64, null);
-};
-ZXing.Common.BitMatrix.prototype.ToBitmap = function (format, content) {
-    //var writer = (function () {
-    //    var $v1 = new ZXing.BarcodeWriter.ctor();
-    //    $v1.set_Format(format);
-    //    return $v1;
-    //}).call(this);
-    //return writer.Write$$String(content);
-};
-

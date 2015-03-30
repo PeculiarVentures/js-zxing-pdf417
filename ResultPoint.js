@@ -24,13 +24,9 @@
 ZXing.ResultPoint = function (x, y) {
     this.x = 0;
     this.y = 0;
-    this.bytesX = null;
-    this.bytesY = null;
     this.toString = null;
     this.x = x;
     this.y = y;
-    this.bytesX = getInt32Bytes(x);
-    this.bytesY = getInt32Bytes(y);
 };
 ZXing.ResultPoint.prototype.get_X = function () {
     return this.x;
@@ -43,9 +39,6 @@ ZXing.ResultPoint.prototype.Equals = function (other) {
     if (otherPoint == null)
         return false;
     return this.x == otherPoint.x && this.y == otherPoint.y;
-};
-ZXing.ResultPoint.prototype.GetHashCode = function () {
-    return 31 * ((this.bytesX[0] << 24) + (this.bytesX[1] << 16) + (this.bytesX[2] << 8) + this.bytesX[3]) + (this.bytesY[0] << 24) + (this.bytesY[1] << 16) + (this.bytesY[2] << 8) + this.bytesY[3];
 };
 ZXing.ResultPoint.prototype.toString = function () {
     if (this.toString == null) {

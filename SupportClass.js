@@ -63,16 +63,6 @@ function ArrayCopy(source, sourceIndex, dest, destIndex, n) {
         dest[destIndex++] = source[sourceIndex];
 }
 
-function getInt32Bytes(x) {
-    var bytes = [];
-    var i = 8;
-    do {
-        bytes[--i] = x & (255);
-        x = x >> 8;
-    } while (i)
-    return bytes;
-}
-
 if (typeof Array.prototype.blockCopy != 'function') {
     Array.prototype.blockCopy = function (dest, sourceIndex, destIndex, n) {
         n = typeof n != 'undefined' ? n : this.length;
