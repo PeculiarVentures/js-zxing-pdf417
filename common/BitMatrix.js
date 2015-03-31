@@ -290,14 +290,15 @@ ZXing.Common.BitMatrix.prototype.Equals = function (obj) {
     }
     return true;
 };
-ZXing.Common.BitMatrix.prototype.toString = function () {
-    return this.ToString("X ", "  ", "\n");
-};
-ZXing.Common.BitMatrix.prototype.ToString = function (setString, unsetString) {
-    return this.ToString(setString, unsetString, '\n');
-};
-ZXing.Common.BitMatrix.prototype.ToString = function (setString, unsetString, lineSeparator) {
+
+ZXing.Common.BitMatrix.prototype.toString = function (setString, unsetString, lineSeparator) {
     var result = "";
+
+    // default parameters values
+    setString = setString || "X";
+    unsetString = unsetString || "  ";
+    lineSeparator = lineSeparator || '\n';
+
     for (var y = 0; y < this.height; y++) {
         for (var x = 0; x < this.width; x++) {
             result += (this.get_Item(x, y) ? setString : unsetString);
