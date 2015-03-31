@@ -40,11 +40,8 @@ ZXing.ResultPoint.prototype.Equals = function (other) {
     return this.x == otherPoint.x && this.y == otherPoint.y;
 };
 ZXing.ResultPoint.prototype.toString = function () {
-    if (this.toString == null) {
-        var result = "(" + this.x + ", " + this.y + ")";
-        this.toString = result;
-    }
-    return this.toString;
+    var result = "(" + this.x + ", " + this.y + ")";
+    return result;
 };
 ZXing.ResultPoint.orderBestPatterns = function (patterns) {
     var zeroOneDistance = ZXing.ResultPoint.distance(patterns[0], patterns[1]);
