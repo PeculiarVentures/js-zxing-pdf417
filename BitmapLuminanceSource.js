@@ -33,6 +33,10 @@ ZXing.BitmapLuminanceSource = function (bitmap, w, h) {
             width = w;
             height = h;
             data = bitmap;
+        } else if (bitmap instanceof ImageData) {
+            width = w;
+            height = h;
+            data = bitmap.data;
         } else {
             canvas = w;
             width = canvas.width;
