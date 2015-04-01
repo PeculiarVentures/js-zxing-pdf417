@@ -1,7 +1,7 @@
 //
 // Ported to JavaScript by Patrizio Bruno 2015
 //  
-// desertconsulting@gmail.com, https://github.com/PeculiarVentures/validatewallet.com
+// desertconsulting@gmail.com, https://github.com/PeculiarVentures/idscanjs
 //
 
 
