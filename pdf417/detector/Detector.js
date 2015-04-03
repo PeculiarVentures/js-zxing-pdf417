@@ -42,7 +42,8 @@ ZXing.PDF417.Internal.Detector.detectSingle = function (image, hints, multiple) 
         return null;
     var barcodeCoordinates = ZXing.PDF417.Internal.Detector.detectMultiple(multiple, bitMatrix);
     if (barcodeCoordinates == null || barcodeCoordinates.length == 0) {
-        bitMatrix = $.extend({}, bitMatrix, true);
+        //bitMatrix = $.extend({}, bitMatrix, true);
+        bitMatrix = new ZXing.Common.BitMatrix(bitMatrix.width, bitMatrix.height, bitMatrix.rowSize, JSON.parse(JSON.stringify(bitMatrix.bits)));
         bitMatrix.rotate180();
         barcodeCoordinates = ZXing.PDF417.Internal.Detector.detectMultiple(multiple, bitMatrix);
     }
