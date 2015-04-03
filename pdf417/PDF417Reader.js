@@ -36,9 +36,9 @@ ZXing.PDF417.PDF417Reader.prototype.decode = function (image, hints) {
 ZXing.PDF417.PDF417Reader.prototype.decodeMultiple = function (image, hints) {
     return ZXing.PDF417.PDF417Reader.decode(image, hints || null, true);
 };
-ZXing.PDF417.PDF417Reader.decode = function (image, hints, multiple) {
+ZXing.PDF417.PDF417Reader.decode = function (image, hints, multiple, dr) {
     var results = [];
-    var detectorResult = ZXing.PDF417.Internal.Detector.detectSingle(image, hints, multiple);
+    var detectorResult = dr || ZXing.PDF417.Internal.Detector.detectSingle(image, hints, multiple);
     if (detectorResult != null) {
         var pointsList = detectorResult.Points;
         for (var $i = 0, $n = pointsList.length ; $i < $n; $i++) {
