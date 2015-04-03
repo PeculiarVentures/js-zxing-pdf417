@@ -25,7 +25,7 @@ ZXing.PDF417.Internal.EC.ModulusPoly = function (field, coefficients) {
     this.field = null;
     this.coefficients = null;
     if (coefficients.length == 0) {
-        throw $CreateException(new System.ArgumentException.ctor(), new Error());
+        throw new Error();
     }
     this.field = field;
     var coefficientsLength = coefficients.length;
@@ -155,7 +155,7 @@ ZXing.PDF417.Internal.EC.ModulusPoly.prototype.multiply = function (scalar) {
 };
 ZXing.PDF417.Internal.EC.ModulusPoly.prototype.multiplyByMonomial = function (degree, coefficient) {
     if (degree < 0) {
-        throw $CreateException(new System.ArgumentException.ctor(), new Error());
+        throw new Error();
     }
     if (coefficient == 0) {
         return this.field.Zero;
