@@ -35,7 +35,7 @@ if (typeof (Int32Array) == "undefined") {
     var Int32Array = Array;
 } else {
     ZeroFilledInt32Array = function (size) {
-        return Int32Array(size);
+        return new Int32Array(size);
     };
 }
 
