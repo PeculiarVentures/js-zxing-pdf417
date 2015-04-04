@@ -39,8 +39,8 @@ ZXing.PDF417.Internal.DetectionResultRowIndicatorColumn.prototype.adjustComplete
     this.removeIncorrectCodewords(codewords, metadata);
     var top = this.IsLeft ? this.Box.TopLeft : this.Box.TopRight;
     var bottom = this.IsLeft ? this.Box.BottomLeft : this.Box.BottomRight;
-    var firstRow = this.imageRowToCodewordIndex(top.get_Y());
-    var lastRow = this.imageRowToCodewordIndex(bottom.get_Y());
+    var firstRow = this.imageRowToCodewordIndex(top.y);
+    var lastRow = this.imageRowToCodewordIndex(bottom.y);
     var averageRowHeight = Math.floor(lastRow - firstRow) / metadata.RowCount;
     var barcodeRow = -1;
     var maxRowHeight = 1;
@@ -106,8 +106,8 @@ ZXing.PDF417.Internal.DetectionResultRowIndicatorColumn.prototype.getRowHeights 
 ZXing.PDF417.Internal.DetectionResultRowIndicatorColumn.prototype.adjustIncompleteIndicatorColumnRowNumbers = function (metadata){
     var top = this.IsLeft ? this.Box.TopLeft : this.Box.TopRight;
     var bottom = this.IsLeft ? this.Box.BottomLeft : this.Box.BottomRight;
-    var firstRow = this.imageRowToCodewordIndex(top.get_Y());
-    var lastRow = this.imageRowToCodewordIndex(bottom.get_Y());
+    var firstRow = this.imageRowToCodewordIndex(top.y);
+    var lastRow = this.imageRowToCodewordIndex(bottom.y);
     var averageRowHeight = Math.floor((lastRow - firstRow) / metadata.RowCount);
     var codewords = this.Codewords;
     var barcodeRow = -1;
