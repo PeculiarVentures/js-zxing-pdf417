@@ -54,7 +54,7 @@ ZXing.PDF417.Internal.Detector.detectMultiple = function (multiple, bitMatrix) {
     var row = 0;
     var column = 0;
     var foundBarcodeInRow = false;
-    while (row < bitMatrix.get_Height()) {
+    while (row < bitMatrix.height) {
         var vertices = ZXing.PDF417.Internal.Detector.findVertices(bitMatrix, row, column);
         if (vertices[0] == null && vertices[3] == null) {
             if (!foundBarcodeInRow) {
@@ -66,10 +66,10 @@ ZXing.PDF417.Internal.Detector.detectMultiple = function (multiple, bitMatrix) {
             for (var $i = 0 ; $i < n ; $i++) {
                 var barcodeCoordinate = barcodeCoordinates[$i];
                 if (barcodeCoordinate[1] != null) {
-                    row = Math.max(row, barcodeCoordinate[1].get_Y());
+                    row = Math.max(row, barcodeCoordinate[1].x);
                 }
                 if (barcodeCoordinate[3] != null) {
-                    row = Math.max(row, barcodeCoordinate[3].get_Y());
+                    row = Math.max(row, barcodeCoordinate[3].x);
                 }
             }
             row += 5;
@@ -81,24 +81,24 @@ ZXing.PDF417.Internal.Detector.detectMultiple = function (multiple, bitMatrix) {
             break;
         }
         if (vertices[2] != null) {
-            column = vertices[2].get_X();
-            row = vertices[2].get_Y();
+            column = vertices[2].x;
+            row = vertices[2].x;
         }
         else {
-            column = vertices[4].get_X();
-            row = vertices[4].get_Y();
+            column = vertices[4].x;
+            row = vertices[4].x;
         }
     }
     return barcodeCoordinates;
 };
 ZXing.PDF417.Internal.Detector.findVertices = function (matrix, startRow, startColumn) {
-    var height = matrix.get_Height();
-    var width = matrix.get_Width();
+    var height = matrix.height;
+    var width = matrix.width;
     var result = new Array(8);
     ZXing.PDF417.Internal.Detector.copyToResult(result, ZXing.PDF417.Internal.Detector.findRowsWithPattern(matrix, height, width, startRow, startColumn, ZXing.PDF417.Internal.Detector.START_PATTERN), ZXing.PDF417.Internal.Detector.INDEXES_START_PATTERN);
     if (result[4] != null) {
-        startColumn = result[4].get_X();
-        startRow = result[4].get_Y();
+        startColumn = result[4].x;
+        startRow = result[4].x;
     }
     ZXing.PDF417.Internal.Detector.copyToResult(result, ZXing.PDF417.Internal.Detector.findRowsWithPattern(matrix, height, width, startRow, startColumn, ZXing.PDF417.Internal.Detector.STOP_PATTERN), ZXing.PDF417.Internal.Detector.INDEXES_STOP_PATTERN);
     return result;
@@ -134,7 +134,7 @@ ZXing.PDF417.Internal.Detector.findRowsWithPattern = function (matrix, height, w
     var stopRow = startRow + 1;
     if (found) {
         var skippedRowCount = 0;
-        var previousRowLoc = new Int32Array([result[0].get_X(), result[1].get_X()]);
+        var previousRowLoc = new Int32Array([result[0].x, result[1].x]);
         for (; stopRow < height; stopRow++) {
             var loc = ZXing.PDF417.Internal.Detector.findGuardPattern(matrix, previousRowLoc[0], stopRow, width, false, pattern, counters);
             if (loc != null && Math.abs(previousRowLoc[0] - loc[0]) < 5 && Math.abs(previousRowLoc[1] - loc[1]) < 5) {

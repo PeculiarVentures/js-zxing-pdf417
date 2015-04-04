@@ -40,8 +40,5 @@ ZXing.Common.DecoderResult = function (rawBytes, text, byteSegments, ecLevel, sa
     this.ECLevel = ecLevel;
     this.StructuredAppendParity = typeof saParity == 'undefined' ? -1 : saParity;
     this.StructuredAppendSequenceNumber = typeof saSequence == 'undefined' ? -1 : saSequence;
-};
-
-ZXing.Common.DecoderResult.prototype.get_StructuredAppend = function () {
-    return this.StructuredAppendParity >= 0 && this.StructuredAppendSequenceNumber >= 0;
+    this.AmbiguousValuesCount = 0;
 };

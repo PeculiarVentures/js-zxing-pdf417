@@ -65,11 +65,11 @@ ZXing.PDF417.Internal.BoundingBox.prototype.addMissingRows = function (missingSt
     var newBottomRight = this.BottomRight;
     if (missingStartRows > 0) {
         var top = isLeft ? this.TopLeft : this.TopRight;
-        var newMinY = top.get_Y() - missingStartRows;
+        var newMinY = top.y - missingStartRows;
         if (newMinY < 0) {
             newMinY = 0;
         }
-        var newTop = new ZXing.ResultPoint(top.get_X(), newMinY);
+        var newTop = new ZXing.ResultPoint(top.x, newMinY);
         if (isLeft) {
             newTopLeft = newTop;
         }
@@ -79,11 +79,11 @@ ZXing.PDF417.Internal.BoundingBox.prototype.addMissingRows = function (missingSt
     }
     if (missingEndRows > 0) {
         var bottom = isLeft ? this.BottomLeft : this.BottomRight;
-        var newMaxY = bottom.get_Y() + missingEndRows;
+        var newMaxY = bottom.y + missingEndRows;
         if (newMaxY >= this.image.get_Height()) {
             newMaxY = this.image.get_Height() - 1;
         }
-        var newBottom = new ZXing.ResultPoint(bottom.get_X(), newMaxY);
+        var newBottom = new ZXing.ResultPoint(bottom.x, newMaxY);
         if (isLeft) {
             newBottomLeft = newBottom;
         }
@@ -96,17 +96,17 @@ ZXing.PDF417.Internal.BoundingBox.prototype.addMissingRows = function (missingSt
 };
 ZXing.PDF417.Internal.BoundingBox.prototype.calculateMinMaxValues = function () {
     if (this.TopLeft == null) {
-        this.TopLeft = new ZXing.ResultPoint(0, this.TopRight.get_Y());
-        this.BottomLeft = new ZXing.ResultPoint(0, this.BottomRight.get_Y());
+        this.TopLeft = new ZXing.ResultPoint(0, this.TopRight.y);
+        this.BottomLeft = new ZXing.ResultPoint(0, this.BottomRight.y);
     }
     else if (this.TopRight == null) {
-        this.TopRight = new ZXing.ResultPoint(this.image.get_Width() - 1, this.TopLeft.get_Y());
-        this.BottomRight = new ZXing.ResultPoint(this.image.get_Width() - 1, this.TopLeft.get_Y());
+        this.TopRight = new ZXing.ResultPoint(this.image.width - 1, this.TopLeft.y);
+        this.BottomRight = new ZXing.ResultPoint(this.image.width - 1, this.TopLeft.y);
     }
-    this.MinX = Math.min(this.TopLeft.get_X(), this.BottomLeft.get_X());
-    this.MaxX = Math.max(this.TopRight.get_X(), this.BottomRight.get_X());
-    this.MinY = Math.min(this.TopLeft.get_Y(), this.TopRight.get_Y());
-    this.MaxY = Math.max(this.BottomLeft.get_Y(), this.BottomRight.get_Y());
+    this.MinX = Math.min(this.TopLeft.x, this.BottomLeft.x);
+    this.MaxX = Math.max(this.TopRight.x, this.BottomRight.x);
+    this.MinY = Math.min(this.TopLeft.y, this.TopRight.y);
+    this.MaxY = Math.max(this.BottomLeft.y, this.BottomRight.y);
 };
 ZXing.PDF417.Internal.BoundingBox.prototype.SetBottomRight = function (bottomRight) {
     this.BottomRight = bottomRight;

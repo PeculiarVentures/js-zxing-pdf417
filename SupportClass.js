@@ -21,6 +21,24 @@
 // limitations under the License.
 ///
 
+var ZeroFilledInt32Array = function (size) {
+    var rv = [];
+    while (--len >= 0) {
+        rv.push(0);
+    }
+    return rv;
+};
+
+if (typeof (Uint8Array) == "undefined")
+    var Uint8Array = Array;
+if (typeof (Int32Array) == "undefined") {
+    var Int32Array = Array;
+} else {
+    ZeroFilledInt32Array = function (size) {
+        return Int32Array(size);
+    };
+}
+
 if (typeof ($Inherit) == 'undefined') {
     var $Inherit = function (ce, ce2) {
 
@@ -76,6 +94,34 @@ if (typeof Array.prototype.blockCopy != 'function') {
     }
 }
 
+if (typeof Int16Array.prototype.blockCopy != 'function') {
+    Int16Array.prototype.blockCopy = Array.prototype.blockCopy;
+}
+
+if (typeof Int32Array.prototype.blockCopy != 'function') {
+    Int32Array.prototype.blockCopy = Array.prototype.blockCopy;
+}
+
+if (typeof Uint16Array.prototype.blockCopy != 'function') {
+    Uint16Array.prototype.blockCopy = Array.prototype.blockCopy;
+}
+
+if (typeof Uint8Array.prototype.blockCopy != 'function') {
+    Uint8Array.prototype.blockCopy = Array.prototype.blockCopy;
+}
+
+if (typeof Uint32Array.prototype.blockCopy != 'function') {
+    Uint32Array.prototype.blockCopy = Array.prototype.blockCopy;
+}
+
+if (typeof Uint8Array.prototype.blockCopy != 'function') {
+    Uint8Array.prototype.blockCopy = Array.prototype.blockCopy;
+}
+
+if (typeof Uint8ClampedArray.prototype.blockCopy != 'function') {
+    Uint8ClampedArray.prototype.blockCopy = Array.prototype.blockCopy;
+}
+
 if (!String.prototype.format) {
     String.prototype.format = function () {
         var args = arguments;
@@ -90,11 +136,6 @@ if (!String.prototype.format) {
 }
 
 function FormatInteger(n, l, c) { return (n / Math.pow(10, l)).toFixed(l).substr(2).replace(/0/g, c || ' '); }
-
-if (typeof (Uint8Array) == "undefined")
-    var Uint8Array = Array;
-if (typeof (Int32Array) == "undefined")
-    var Int32Array = Array;
 
 if (typeof (ZXing) == "undefined")
     var ZXing = {};

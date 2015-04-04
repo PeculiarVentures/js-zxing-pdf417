@@ -159,8 +159,8 @@ ZXing.PDF417.Internal.PDF417ScanningDecoder.getRowIndicatorColumn = function (im
     var rowIndicatorColumn = new ZXing.PDF417.Internal.DetectionResultRowIndicatorColumn(boundingBox, leftToRight);
     for (var i = 0; i < 2; i++) {
         var increment = i == 0 ? 1 : -1;
-        var startColumn = startPoint.get_X();
-        for (var imageRow = startPoint.get_Y() ; imageRow <= boundingBox.MaxY && imageRow >= boundingBox.MinY; imageRow += increment) {
+        var startColumn = startPoint.x;
+        for (var imageRow = startPoint.y ; imageRow <= boundingBox.MaxY && imageRow >= boundingBox.MinY; imageRow += increment) {
             var codeword = ZXing.PDF417.Internal.PDF417ScanningDecoder.detectCodeword(image, 0, image.get_Width(), leftToRight, startColumn, imageRow, minCodewordWidth, maxCodewordWidth);
             if (codeword != null) {
                 rowIndicatorColumn.setCodeword(imageRow, codeword);
@@ -231,8 +231,10 @@ ZXing.PDF417.Internal.PDF417ScanningDecoder.createDecoderResultFromAmbiguousValu
         }
         try {
             var result = ZXing.PDF417.Internal.PDF417ScanningDecoder.decodeCodewords(codewords, ecLevel, erasureArray);
-            if (result != null)
+            if (result != null) {
+                result.AmbiguousValuesCount = ambiguousIndexValues.length;
                 return result;
+            }
         }
         catch ($$e1) {
         }

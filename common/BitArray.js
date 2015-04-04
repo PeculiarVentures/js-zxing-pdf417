@@ -230,9 +230,7 @@ ZXing.Common.BitArray.prototype.reverse = function () {
     this.bits = newBits;
 };
 ZXing.Common.BitArray.makeArray = function (size) {
-    var rv = [];
-    rv.blockCopy(new Array((size + 31) >> 5), 0, 0, (size + 31) >> 5);
-    return rv;
+    return ZeroFilledInt32Array((size + 31) >> 5);
 };
 ZXing.Common.BitArray.prototype.Equals = function (o) {
     var other = o instanceof ZXing.Common.BitArray ? o : null;

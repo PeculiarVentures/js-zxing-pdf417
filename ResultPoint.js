@@ -27,12 +27,7 @@ ZXing.ResultPoint = function (x, y) {
     this.x = x;
     this.y = y;
 };
-ZXing.ResultPoint.prototype.get_X = function () {
-    return this.x;
-};
-ZXing.ResultPoint.prototype.get_Y = function () {
-    return this.y;
-};
+
 ZXing.ResultPoint.prototype.Equals = function (other) {
     var otherPoint = other instanceof ZXing.ResultPoint ? other : null;
     if (otherPoint == null)
