@@ -48,7 +48,6 @@ ZXing.BitmapLuminanceSource = function (bitmap, w, h) {
 
         var stride = Math.abs(data.length / height);
 
-        if(!this.luminances)
         for (var y = 0; y < height; y++) {
             var strideOffset = y * stride;
 
