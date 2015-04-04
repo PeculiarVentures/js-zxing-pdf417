@@ -34,8 +34,8 @@ ZXing.BitmapLuminanceSource = function (bitmap, w, h) {
             height = h;
             data = bitmap;
         } else if (bitmap instanceof ImageData) {
-            width = w;
-            height = h;
+            width = w || bitmap.width;
+            height = h || bitmap.height;
             data = bitmap.data;
         } else {
             canvas = w;
@@ -48,17 +48,16 @@ ZXing.BitmapLuminanceSource = function (bitmap, w, h) {
 
         var stride = Math.abs(data.length / height);
 
+        if(!this.luminances)
         for (var y = 0; y < height; y++) {
             var strideOffset = y * stride;
 
-            var offset = y * width;
             var maxIndex = (4 * width) + strideOffset;
             for (var x = strideOffset; x < maxIndex; x += 4) {
                 var luminance = ((7424 * data[x] + 38550 * data[x + 1] + 19562 * data[x + 2]) >> 16);
                 var alpha = data[x + 3];
                 luminance = (((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8) + 1);
-                this.luminances[offset] = luminance;
-                offset++;
+                this.luminances.push(luminance);
             }
         }
     }
