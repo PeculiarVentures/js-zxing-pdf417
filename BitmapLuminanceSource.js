@@ -23,6 +23,8 @@
 
 ZXing.BitmapLuminanceSource = function (bitmap, w, h) {
 
+    var debug = window && window.__debug === true;
+
     if (typeof bitmap == 'number') {
         var width = bitmap
             , height = w;
@@ -48,6 +50,8 @@ ZXing.BitmapLuminanceSource = function (bitmap, w, h) {
 
         var stride = Math.abs(data.length / height);
 
+        if(debug) this.debugBitmap = [];
+
         for (var y = 0; y < height; y++) {
             var strideOffset = y * stride;
 
@@ -56,7 +60,16 @@ ZXing.BitmapLuminanceSource = function (bitmap, w, h) {
                 var luminance = ((7424 * data[x] + 38550 * data[x + 1] + 19562 * data[x + 2]) >> 16);
                 var alpha = data[x + 3];
                 luminance = (((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8) + 1);
+
+                //luminance = luminance < 50 ? 1 : (luminance > 90 ? 255 : luminance)
+
                 this.luminances.push(luminance);
+                if (debug) {
+                    this.debugBitmap.push(luminance);
+                    this.debugBitmap.push(luminance);
+                    this.debugBitmap.push(luminance);
+                    this.debugBitmap.push(255);
+                }
             }
         }
     }
