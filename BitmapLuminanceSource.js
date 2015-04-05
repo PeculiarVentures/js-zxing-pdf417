@@ -23,7 +23,7 @@
 
 ZXing.BitmapLuminanceSource = function (bitmap, w, h) {
 
-    var debug = window && window.__debug === true;
+    var debug = typeof window != 'undefined' && window.__debug === true;
 
     if (typeof bitmap == 'number') {
         var width = bitmap
