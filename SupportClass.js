@@ -137,8 +137,10 @@ if (!String.prototype.format) {
 
 function FormatInteger(n, l, c) { return (n / Math.pow(10, l)).toFixed(l).substr(2).replace(/0/g, c || ' '); }
 
-if (typeof (ZXing) == "undefined")
-    var ZXing = {};
+var ZXing = typeof exports != 'undefined' && typeof exports.ZXing != 'undefined' ? exports.ZXing : {};
+
+if (typeof exports != 'undefined')
+    exports.ZXing = ZXing;
 
 if (typeof (ZXing.Common) == "undefined")
     ZXing.Common = {};
