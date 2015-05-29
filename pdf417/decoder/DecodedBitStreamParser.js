@@ -51,7 +51,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.EXP900[0] = BigInteger.ONE;
 var nineHundred = new BigInteger(900);
 ZXing.PDF417.Internal.DecodedBitStreamParser.EXP900[1] = nineHundred;
 for (var i = 2; i < ZXing.PDF417.Internal.DecodedBitStreamParser.EXP900.length; i++) {
-    ZXing.PDF417.Internal.DecodedBitStreamParser.EXP900[i] = BigInteger.multiply(ZXing.PDF417.Internal.DecodedBitStreamParser.EXP900[i - 1], nineHundred);
+    ZXing.PDF417.Internal.DecodedBitStreamParser.EXP900[i] = ZXing.PDF417.Internal.DecodedBitStreamParser.EXP900[i - 1].multiply(nineHundred);
 }
 ZXing.PDF417.Internal.DecodedBitStreamParser.decode = function (codewords, ecLevel) {
     var result = "";
