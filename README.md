@@ -7,6 +7,7 @@ Build
 -----
 
   npm install
+  
   grunt
 
 
