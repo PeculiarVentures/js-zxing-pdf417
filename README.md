@@ -7,3 +7,8 @@ Build
 -----------------------------
 npm install
 grunt
+
+
+Requirements
+------------------------------
+This library depends on https://github.com/peterolson/BigInteger.js
