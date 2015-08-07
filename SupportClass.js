@@ -21,7 +21,7 @@
 // limitations under the License.
 ///
 
-var ZeroFilledInt32Array = function (size) {
+var ZeroFilledInt32Array = function (len) {
     var rv = [];
     while (--len >= 0) {
         rv.push(0);
