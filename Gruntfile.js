@@ -19,8 +19,8 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         options: {
-          banner: '(function(exports, crypto, Promise, Error, Uint8Array, undefined){\n',
-          footer: "}(window, window.crypto, window.Promise, window.Error, window.Uint8Array));\n"
+          banner: '(function(exports, Error, document, Uin8Array, Uint32Array, undefined){\ndocument.addEventListener("DOMContentLoaded", function() {\n',
+          footer: "}, false);\n}(window, window.Error, window.document, window.Uint8Array, window.Uint32Array));\n"
         },
         src: [
           'SupportClass.js',

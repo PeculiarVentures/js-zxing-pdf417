@@ -30,9 +30,9 @@ var ZeroFilledInt32Array = function (len) {
 };
 
 if (typeof (Uint8Array) == "undefined")
-    var Uint8Array = Array;
+    Uint8Array = Array;
 if (typeof (Int32Array) == "undefined") {
-    var Int32Array = Array;
+    Int32Array = Array;
 } else {
     ZeroFilledInt32Array = function (size) {
         return new Int32Array(size);
