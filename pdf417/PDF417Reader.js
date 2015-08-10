@@ -24,15 +24,6 @@
 ZXing.PDF417.PDF417Reader = function () {
 };
 
-ZXing.PDF417.PDF417Reader.prototype.decode = function (image, hints) {
-    var results = ZXing.PDF417.PDF417Reader.decode(image, hints || null, false);
-    if (results.length == 0) {
-        return null;
-    }
-    else {
-        return results[0];
-    }
-};
 ZXing.PDF417.PDF417Reader.prototype.decodeMultiple = function (image, hints) {
     return ZXing.PDF417.PDF417Reader.decode(image, hints || null, true);
 };
@@ -52,8 +43,7 @@ ZXing.PDF417.PDF417Reader.decode = function (image, hints, multiple, dr) {
             result.putMetadata("ERROR_CORRECTION_LEVEL", decoderResult.ECLevel);
             var pdf417ResultMetadata = decoderResult.Other instanceof ZXing.PDF417.PDF417ResultMetadata || decoderResult.Other == null ? decoderResult.Other : (function () {
                 throw new Error("InvalidCastException");
-            }
-            ());
+            }());
             if (pdf417ResultMetadata != null) {
                 //result.putMetadata(ZXing.ResultMetadataType.PDF417_EXTRA_METADATA, pdf417ResultMetadata);
                 result.putMetadata("PDF417_EXTRA_METADATA", pdf417ResultMetadata);
