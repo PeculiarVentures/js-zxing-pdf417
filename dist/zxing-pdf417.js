@@ -1,4 +1,4 @@
-(function(exports, Error, document, Uin8Array, Uint32Array, undefined){
+(function(exports, Error, document, Uin8Array, Uint32Array, BigInteger, undefined){
 document.addEventListener("DOMContentLoaded", function() {
 //
 // Ported to JavaScript by Patrizio Bruno 2015
@@ -4862,4 +4862,4 @@ ZXing.PDF417.PDF417Reader.prototype.reset = function () {
 };
 
 }, false);
-}(window, window.Error, window.document, window.Uint8Array, window.Uint32Array));
+}(window, window.Error, window.document, window.Uint8Array, window.Uint32Array, window.bigInt));
