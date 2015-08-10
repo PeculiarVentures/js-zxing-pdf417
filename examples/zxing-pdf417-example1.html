@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ZXing PDF417 example</title>
+    <script src="./BigInteger.min.js"></script>
+    <script src="../dist/zxing-pdf417.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+        (function(window, $, undefined) {
+            $(function() {
+
+                function doScan(image) {
+                    var
+                            canvas = document.createElement('canvas'),
+                            canvas_context = canvas.getContext('2d'),
+                            source,
+                            binarizer,
+                            bitmap;
+
+                    $('.error').empty();
+                    $('.decodedText').empty();
+
+                    canvas.width = image.naturalWidth;
+                    canvas.height = image.naturalHeight;
+                    canvas_context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+                    try {
+                        source = new ZXing.BitmapLuminanceSource(canvas_context, image);
+                        binarizer = new ZXing.Common.HybridBinarizer(source);
+                        bitmap = new ZXing.BinaryBitmap(binarizer);
+                        $('.decodedText').text(JSON.stringify(ZXing.PDF417.PDF417Reader.decode(bitmap, null, false), null, 4));
+                    } catch (err) {
+                        $('.error').text(err);
+                    }
+                }
+
+                $('button').click(function(){
+                    doScan($('img')[0]);
+                });
+
+                $('img').load(function(){
+                    doScan($('img')[0]);
+                });
+            });
+        })(window, window.jQuery);
+    </script>
+    <style>
+        .decodedText {
+            overflow: scroll;
+            max-width: 48%;
+            height: 500px;
+        }
+
+        .error {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <form>
+        <input type="file"/>
+        <button type="button">Decode</button>
+        <div class="error"></div>
+        <div><pre class="decodedText"></pre></div>
+        <img src="./reverse_side_sample.jpg"/>
+    </form>
+</div>
+</body>
+</html>
