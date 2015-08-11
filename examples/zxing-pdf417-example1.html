@@ -10,6 +10,11 @@
         (function(window, $, undefined) {
             $(function() {
 
+                function handleFiles(f) {
+                    var img = $('img');
+                    img[0].src = URL.createObjectURL(f.target.files[0]);
+                }
+
                 function doScan(image) {
                     var
                             canvas = document.createElement('canvas'),
@@ -35,13 +40,15 @@
                     }
                 }
 
-                $('button').click(function(){
+                $('button').click(function() {
                     doScan($('img')[0]);
                 });
 
-                $('img').load(function(){
+                $('img').load(function() {
                     doScan($('img')[0]);
                 });
+
+                $('#file').change(handleFiles);
             });
         })(window, window.jQuery);
     </script>
@@ -61,10 +68,12 @@
 <body>
 <div>
     <form>
-        <input type="file"/>
+        <input type="file" id="file" />
         <button type="button">Decode</button>
         <div class="error"></div>
-        <div><pre class="decodedText"></pre></div>
+        <div>
+            <pre class="decodedText"></pre>
+        </div>
         <img src="./reverse_side_sample.jpg"/>
     </form>
 </div>
