@@ -26,7 +26,7 @@ ZXing.PDF417.PDF417Reader = function () {
 
 ZXing.PDF417.PDF417Reader.prototype.decode = function (image, hints) {
     var results = ZXing.PDF417.PDF417Reader.decode(image, hints || null, false);
-    if (!results.length) {
+    if (results.length == 0) {
         return null;
     }
     else {

@@ -22,184 +22,181 @@
 ///
 
 var ZeroFilledInt32Array = function (len) {
-  var rv = [];
-  while (--len >= 0) {
-    rv.push(0);
-  }
-  return rv;
+    var rv = [];
+    while (--len >= 0) {
+        rv.push(0);
+    }
+    return rv;
 };
 
 if (typeof (Uint8Array) == "undefined")
-  var Uint8Array = Array;
+    Uint8Array = Array;
 if (typeof (Int32Array) == "undefined") {
-  var Int32Array = Array;
+    Int32Array = Array;
 } else {
-  ZeroFilledInt32Array = function (size) {
-    return new Int32Array(size);
-  };
+    ZeroFilledInt32Array = function (size) {
+        return new Int32Array(size);
+    };
 }
 
 if (typeof ($Inherit) == 'undefined') {
-  var $Inherit = function (ce, ce2) {
-    var p = null;
-    if (typeof (Object.getOwnPropertyNames) == 'undefined') {
+    var $Inherit = function (ce, ce2) {
 
-      for(p in ce2.prototype)
-        if (typeof (ce.prototype[p]) == 'undefined' || ce.prototype[p] == Object.prototype[p])
-          ce.prototype[p] = ce2.prototype[p];
-      for(p in ce2)
-        if (typeof (ce[p]) == 'undefined')
-          ce[p] = ce2[p];
-      ce.$baseCtor = ce2;
+        if (typeof (Object.getOwnPropertyNames) == 'undefined') {
 
-    } else {
+            for (var p in ce2.prototype)
+                if (typeof (ce.prototype[p]) == 'undefined' || ce.prototype[p] == Object.prototype[p])
+                    ce.prototype[p] = ce2.prototype[p];
+            for (var p in ce2)
+                if (typeof (ce[p]) == 'undefined')
+                    ce[p] = ce2[p];
+            ce.$baseCtor = ce2;
 
-      var props = Object.getOwnPropertyNames(ce2.prototype);
-      for(var i = 0; i < props.length; i++)
-        if (typeof (Object.getOwnPropertyDescriptor(ce.prototype, props[i])) == 'undefined')
-          Object.defineProperty(ce.prototype, props[i], Object.getOwnPropertyDescriptor(ce2.prototype, props[i]));
+        } else {
 
-      for(p in ce2)
-        if (typeof (ce[p]) == 'undefined')
-          ce[p] = ce2[p];
-      ce.$baseCtor = ce2;
+            var props = Object.getOwnPropertyNames(ce2.prototype);
+            for (var i = 0; i < props.length; i++)
+                if (typeof (Object.getOwnPropertyDescriptor(ce.prototype, props[i])) == 'undefined')
+                    Object.defineProperty(ce.prototype, props[i], Object.getOwnPropertyDescriptor(ce2.prototype, props[i]));
+
+            for (var p in ce2)
+                if (typeof (ce[p]) == 'undefined')
+                    ce[p] = ce2[p];
+            ce.$baseCtor = ce2;
+
+        }
 
     }
+};
 
-  };
-}
-
-
-function ArrayCopy (source, sourceIndex, dest, destIndex, n) {
-  n = typeof n != 'undefined' ? n : source.length;
-  destIndex = destIndex || 0;
-  sourceIndex = sourceIndex || 0;
-
-  var max = (dest.length > 0 && dest.length < n) ? dest.length : n;
-  max += sourceIndex;
-
-  for(; sourceIndex < max; sourceIndex++)
-    dest[destIndex++] = source[sourceIndex];
-}
-
-if (typeof Array.prototype.blockCopy != 'function') {
-  Array.prototype.blockCopy = function (dest, sourceIndex, destIndex, n) {
-    n = typeof n != 'undefined' ? n : this.length;
+function ArrayCopy(source, sourceIndex, dest, destIndex, n) {
+    n = typeof n != 'undefined' ? n : source.length;
     destIndex = destIndex || 0;
     sourceIndex = sourceIndex || 0;
 
     var max = (dest.length > 0 && dest.length < n) ? dest.length : n;
     max += sourceIndex;
-    for(; sourceIndex < max; sourceIndex++)
-      dest[destIndex++] = this[sourceIndex];
-  };
+
+    for (; sourceIndex < max; sourceIndex++)
+        dest[destIndex++] = source[sourceIndex];
+}
+
+if (typeof Array.prototype.blockCopy != 'function') {
+    Array.prototype.blockCopy = function (dest, sourceIndex, destIndex, n) {
+        n = typeof n != 'undefined' ? n : this.length;
+        destIndex = destIndex || 0;
+        sourceIndex = sourceIndex || 0;
+
+        var max = (dest.length > 0 && dest.length < n) ? dest.length : n;
+        max += sourceIndex;
+        for (; sourceIndex < max; sourceIndex++)
+            dest[destIndex++] = this[sourceIndex];
+    }
 }
 
 if (typeof Int16Array.prototype.blockCopy != 'function') {
-  Int16Array.prototype.blockCopy = Array.prototype.blockCopy;
+    Int16Array.prototype.blockCopy = Array.prototype.blockCopy;
 }
 
 if (typeof Int32Array.prototype.blockCopy != 'function') {
-  Int32Array.prototype.blockCopy = Array.prototype.blockCopy;
+    Int32Array.prototype.blockCopy = Array.prototype.blockCopy;
 }
 
 if (typeof Uint16Array.prototype.blockCopy != 'function') {
-  Uint16Array.prototype.blockCopy = Array.prototype.blockCopy;
+    Uint16Array.prototype.blockCopy = Array.prototype.blockCopy;
 }
 
 if (typeof Uint8Array.prototype.blockCopy != 'function') {
-  Uint8Array.prototype.blockCopy = Array.prototype.blockCopy;
+    Uint8Array.prototype.blockCopy = Array.prototype.blockCopy;
 }
 
 if (typeof Uint32Array.prototype.blockCopy != 'function') {
-  Uint32Array.prototype.blockCopy = Array.prototype.blockCopy;
+    Uint32Array.prototype.blockCopy = Array.prototype.blockCopy;
 }
 
 if (typeof Uint8Array.prototype.blockCopy != 'function') {
-  Uint8Array.prototype.blockCopy = Array.prototype.blockCopy;
+    Uint8Array.prototype.blockCopy = Array.prototype.blockCopy;
 }
 
 if (typeof Uint8ClampedArray.prototype.blockCopy != 'function') {
-  Uint8ClampedArray.prototype.blockCopy = Array.prototype.blockCopy;
+    Uint8ClampedArray.prototype.blockCopy = Array.prototype.blockCopy;
 }
 
 if (!String.prototype.format) {
-  String.prototype.format = function () {
-    var args = arguments;
-    if (arguments.length == 1 && args[0] instanceof Array) args = args[0];
-    return this.replace(/{(\d+)}/g, function (match, number) {
-      return typeof args[number] != 'undefined' ?
-        args[number] :
-        match
-        ;
-    });
-  };
+    String.prototype.format = function () {
+        var args = arguments;
+        if (arguments.length == 1 && args[0] instanceof Array) args = args[0];
+        return this.replace(/{(\d+)}/g, function (match, number) {
+            return typeof args[number] != 'undefined'
+              ? args[number]
+              : match
+            ;
+        });
+    };
 }
 
-function FormatInteger (n, l, c) {
-  return (n / Math.pow(10, l)).toFixed(l).substr(2).replace(/0/g, c || ' ');
-}
+function FormatInteger(n, l, c) { return (n / Math.pow(10, l)).toFixed(l).substr(2).replace(/0/g, c || ' '); }
 
 var ZXing = typeof exports != 'undefined' && typeof exports.ZXing != 'undefined' ? exports.ZXing : {};
 
 if (typeof exports != 'undefined')
-  exports.ZXing = ZXing;
+    exports.ZXing = ZXing;
 
 if (typeof (ZXing.Common) == "undefined")
-  ZXing.Common = {};
+    ZXing.Common = {};
 
 if (typeof (ZXing.Common.Detector) == "undefined")
-  ZXing.Common.Detector = {};
+    ZXing.Common.Detector = {};
 
 if (typeof (ZXing.PDF417) == "undefined")
-  ZXing.PDF417 = {};
+    ZXing.PDF417 = {};
 
 if (typeof (ZXing.PDF417.Internal) == "undefined")
-  ZXing.PDF417.Internal = {};
+    ZXing.PDF417.Internal = {};
 
 if (typeof (ZXing.PDF417.Internal.EC) == "undefined")
-  ZXing.PDF417.Internal.EC = {};
+    ZXing.PDF417.Internal.EC = {};
 
 ZXing.SupportClass = function () {
 };
 ZXing.SupportClass.GetCharsFromString = function (sourceString, sourceStart, sourceEnd, destinationArray, destinationStart) {
-  var sourceCounter = sourceStart;
-  var destinationCounter = destinationStart;
-  while (sourceCounter < sourceEnd) {
-    destinationArray[destinationCounter] = sourceString.charAt(sourceCounter);
-    sourceCounter++;
-    destinationCounter++;
-  }
+    var sourceCounter = sourceStart;
+    var destinationCounter = destinationStart;
+    while (sourceCounter < sourceEnd) {
+        destinationArray[destinationCounter] = sourceString.charAt(sourceCounter);
+        sourceCounter++;
+        destinationCounter++;
+    }
 };
 ZXing.SupportClass.SetCapacity = function (vector, newCapacity) {
-  while (newCapacity > vector.length)
-    vector.push(new T());
-  while (newCapacity < vector.length)
-    vector.splice(newCapacity, vector.length - newCapacity);
+    while (newCapacity > vector.length)
+        vector.push(new T());
+    while (newCapacity < vector.length)
+        vector.splice(newCapacity, vector.length - newCapacity);
 };
 ZXing.SupportClass.toStringArray = function (strings) {
-  var obj = new Object(strings);
-  var result = [];
-  for(var val in obj) {
-    if (!(obj[val] instanceof Function))
-      result.push(obj[val]);
-  }
-  return result;
+    var obj = new Object(strings);
+    var result = [];
+    for (var val in obj) {
+        if (!(obj[val] instanceof Function))
+            result.push(obj[val]);
+    }
+    return result;
 };
 ZXing.SupportClass.Join = function (separator, origvalues) {
-  var builder = "";
-  separator = (separator ? separator : "");
-  if (origvalues) {
-    var values = new Object(origvalues);
-    for(var idx in values) {
-      builder += values[idx];
-      builder += separator;
+    var builder = "";
+    separator = (separator != null ? separator : "");
+    if (origvalues != null) {
+        var values = new Object(origvalues);
+        for (var idx in values) {
+            builder += values[idx];
+            builder += separator;
+        }
+        if (builder.length > 0) {
+            builder = builder.substr(0, builder.length - separator.length);
+        }
     }
-    if (builder.length > 0) {
-      builder = builder.substr(0, builder.length - separator.length);
-    }
-  }
-  return builder;
+    return builder;
 };
 ZXing.SupportClass.Fill = function (array, value) {
   for(var i = 0; i < array.length; i++) {
@@ -210,7 +207,7 @@ ZXing.SupportClass.Fill = function (array, startIndex, endIndex, value) {
   if (arguments.length < 4) {
     value = startIndex;
     for(var i = 0; i < array.length; i++) {
-      array[i] = value;
+        array[i] = value;
     }
   } else {
     for(var i1 = startIndex; i1 < endIndex; i1++) {

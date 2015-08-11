@@ -1,4 +1,5 @@
-(function(exports, crypto, Promise, Error, Uint8Array, undefined){
+(function(exports, Error, document, Uin8Array, Uint32Array, BigInteger, undefined){
+document.addEventListener("DOMContentLoaded", function() {
 //
 // Ported to JavaScript by Patrizio Bruno 2015
 //  
@@ -31,9 +32,9 @@ var ZeroFilledInt32Array = function (len) {
 };
 
 if (typeof (Uint8Array) == "undefined")
-    var Uint8Array = Array;
+    Uint8Array = Array;
 if (typeof (Int32Array) == "undefined") {
-    var Int32Array = Array;
+    Int32Array = Array;
 } else {
     ZeroFilledInt32Array = function (size) {
         return new Int32Array(size);
@@ -4810,15 +4811,6 @@ ZXing.PDF417.Internal.PDF417ScanningDecoder.ToString = function (barcodeMatrix) 
 ZXing.PDF417.PDF417Reader = function () {
 };
 
-ZXing.PDF417.PDF417Reader.prototype.decode = function (image, hints) {
-    var results = ZXing.PDF417.PDF417Reader.decode(image, hints || null, false);
-    if (results.length == 0) {
-        return null;
-    }
-    else {
-        return results[0];
-    }
-};
 ZXing.PDF417.PDF417Reader.prototype.decodeMultiple = function (image, hints) {
     return ZXing.PDF417.PDF417Reader.decode(image, hints || null, true);
 };
@@ -4838,8 +4830,7 @@ ZXing.PDF417.PDF417Reader.decode = function (image, hints, multiple, dr) {
             result.putMetadata("ERROR_CORRECTION_LEVEL", decoderResult.ECLevel);
             var pdf417ResultMetadata = decoderResult.Other instanceof ZXing.PDF417.PDF417ResultMetadata || decoderResult.Other == null ? decoderResult.Other : (function () {
                 throw new Error("InvalidCastException");
-            }
-            ());
+            }());
             if (pdf417ResultMetadata != null) {
                 //result.putMetadata(ZXing.ResultMetadataType.PDF417_EXTRA_METADATA, pdf417ResultMetadata);
                 result.putMetadata("PDF417_EXTRA_METADATA", pdf417ResultMetadata);
@@ -4870,4 +4861,5 @@ ZXing.PDF417.PDF417Reader.getMinCodewordWidth = function (p) {
 ZXing.PDF417.PDF417Reader.prototype.reset = function () {
 };
 
-}(window, window.crypto, window.Promise, window.Error, window.Uint8Array));
+}, false);
+}(window, window.Error, window.document, window.Uint8Array, window.Uint32Array, window.bigInt));
