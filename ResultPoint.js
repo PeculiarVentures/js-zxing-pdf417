@@ -30,7 +30,7 @@ ZXing.ResultPoint = function (x, y) {
 
 ZXing.ResultPoint.prototype.Equals = function (other) {
     var otherPoint = other instanceof ZXing.ResultPoint ? other : null;
-    if (otherPoint == null)
+    if (!otherPoint)
         return false;
     return this.x == otherPoint.x && this.y == otherPoint.y;
 };

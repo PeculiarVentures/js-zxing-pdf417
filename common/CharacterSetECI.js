@@ -39,16 +39,16 @@ ZXing.Common.CharacterSetECI.addCharacterSet = function (value, encodingNames) {
         }
     } else {
         var encodingName = encodingNames;
-        var eci = new ZXing.Common.CharacterSetECI(value, encodingName);
-        ZXing.Common.CharacterSetECI.VALUE_TO_ECI[value] = eci;
-        ZXing.Common.CharacterSetECI.NAME_TO_ECI[encodingName.toUpperCase()] = eci;
+        var eci2 = new ZXing.Common.CharacterSetECI(value, encodingName);
+        ZXing.Common.CharacterSetECI.VALUE_TO_ECI[value] = eci2;
+        ZXing.Common.CharacterSetECI.NAME_TO_ECI[encodingName.toUpperCase()] = eci2;
     }
 };
 
 ZXing.Common.CharacterSetECI.VALUE_TO_ECI = null;
 ZXing.Common.CharacterSetECI.NAME_TO_ECI = null;
-ZXing.Common.CharacterSetECI.VALUE_TO_ECI = new Object();
-ZXing.Common.CharacterSetECI.NAME_TO_ECI = new Object();
+ZXing.Common.CharacterSetECI.VALUE_TO_ECI = {};
+ZXing.Common.CharacterSetECI.NAME_TO_ECI = {};
 ZXing.Common.CharacterSetECI.addCharacterSet(0, "CP437");
 ZXing.Common.CharacterSetECI.addCharacterSet(1, ["ISO-8859-1", "ISO8859_1"]);
 ZXing.Common.CharacterSetECI.addCharacterSet(2, "CP437");

@@ -43,7 +43,7 @@ ZXing.PDF417.PDF417Common.getBitCountSum = function (moduleBitCount) {
     return bitCountSum;
 };
 ZXing.PDF417.PDF417Common.toIntArray = function (list) {
-    if (list == null) {
+    if (!list) {
         return ZXing.PDF417.PDF417Common.EMPTY_INT_ARRAY;
     }
     return list;

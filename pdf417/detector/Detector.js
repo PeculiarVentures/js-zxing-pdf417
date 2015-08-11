@@ -134,9 +134,9 @@ ZXing.PDF417.Internal.Detector.findRowsWithPattern = function (matrix, height, w
     var stopRow = startRow + 1;
     if (found) {
         var skippedRowCount = 0;
-        var previousRowLoc = new Int32Array([result[0].x, result[1].x]);
+        previousRowLoc = new Int32Array([result[0].x, result[1].x]);
         for (; stopRow < height; stopRow++) {
-            var loc = ZXing.PDF417.Internal.Detector.findGuardPattern(matrix, previousRowLoc[0], stopRow, width, false, pattern, counters);
+            loc = ZXing.PDF417.Internal.Detector.findGuardPattern(matrix, previousRowLoc[0], stopRow, width, false, pattern, counters);
             if (loc != null && Math.abs(previousRowLoc[0] - loc[0]) < 5 && Math.abs(previousRowLoc[1] - loc[1]) < 5) {
                 previousRowLoc = loc;
                 skippedRowCount = 0;
@@ -184,7 +184,7 @@ ZXing.PDF417.Internal.Detector.findGuardPattern = function (matrix, column, row,
                 }
                 patternStart += counters[0] + counters[1];
                 //                System.Array.Copy(counters, 2, counters, 0, patternLength - 2);
-                counters.blockCopy(counters, 2, 0, patternLength - 2)
+                counters.blockCopy(counters, 2, 0, patternLength - 2);
                 counters[patternLength - 2] = 0;
                 counters[patternLength - 1] = 0;
                 counterPosition--;

@@ -136,7 +136,7 @@ ZXing.Common.HybridBinarizer.calculateBlackPoints = function (luminances, subWid
                 }
                 if (max - min > 24) {
                     for (yy++, offset += width; yy < 8; yy++, offset += width) {
-                        for (var xx = 0; xx < 8; xx++) {
+                        for (xx = 0; xx < 8; xx++) {
                             sum += luminances[offset + xx] & 255;
                         }
                     }

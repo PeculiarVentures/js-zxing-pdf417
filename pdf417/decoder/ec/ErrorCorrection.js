@@ -63,7 +63,7 @@ ZXing.PDF417.Internal.EC.ErrorCorrection.prototype.decode = function (received, 
         return false;
     }
     var errorMagnitudes = this.findErrorMagnitudes(omega, sigma, errorLocations);
-    for (var i = 0; i < errorLocations.length; i++) {
+    for (i = 0; i < errorLocations.length; i++) {
         var position = received.length - 1 - this.field.log(errorLocations[i]);
         if (position < 0) {
             return false;
@@ -136,7 +136,7 @@ ZXing.PDF417.Internal.EC.ErrorCorrection.prototype.findErrorMagnitudes = functio
     var formalDerivative = new ZXing.PDF417.Internal.EC.ModulusPoly(this.field, formalDerivativeCoefficients);
     var s = errorLocations.length;
     var result = new Int32Array(s);
-    for (var i = 0; i < s; i++) {
+    for (i = 0; i < s; i++) {
         var xiInverse = this.field.inverse(errorLocations[i]);
         var numerator = this.field.subtract(0, errorEvaluator.evaluateAt(xiInverse));
         var denominator = this.field.inverse(formalDerivative.evaluateAt(xiInverse));

@@ -58,16 +58,17 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decode = function (codewords, ecLev
     var codeIndex = 1;
     var code = codewords[codeIndex++];
     var resultMetadata = new ZXing.PDF417.PDF417ResultMetadata();
+    var p1 = null;
     while (codeIndex < codewords[0]) {
         switch (code) {
             case 900:
-                var p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
+                p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
                 codeIndex = ZXing.PDF417.Internal.DecodedBitStreamParser.textCompaction(p1);
                 result = p1.result;
                 break;
             case 901:
             case 924:
-                var p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
+                p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
                 codeIndex = ZXing.PDF417.Internal.DecodedBitStreamParser.byteCompaction(p1);
                 result = p1.result;
                 break;
@@ -75,7 +76,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decode = function (codewords, ecLev
                 result += (codewords[codeIndex++]);
                 break;
             case 902:
-                var p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
+                p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
                 codeIndex = ZXing.PDF417.Internal.DecodedBitStreamParser.numericCompaction(p1);
                 result = p1.result;
                 break;
@@ -96,7 +97,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decode = function (codewords, ecLev
                 return null;
             default:
                 codeIndex--;
-                var p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
+                p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
                 codeIndex = ZXing.PDF417.Internal.DecodedBitStreamParser.textCompaction(p1);
                 result = p1.result;
                 break;
@@ -110,7 +111,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decode = function (codewords, ecLev
             return null;
         }
     }
-    if (result.length == 0) {
+    if (!result.length) {
         return null;
     }
     var decoderResult = new ZXing.Common.DecoderResult(null, result.toString(), null, ecLevel);
@@ -127,7 +128,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decodeMacroBlock = function (codewo
         segmentIndexArray[i] = codewords[codeIndex];
     }
     var s = ZXing.PDF417.Internal.DecodedBitStreamParser.decodeBase900toBase10(segmentIndexArray, 2);
-    if (s == null)
+    if (!s)
         return -1;
     resultMetadata.set_SegmentIndex(parseInt(s));
     var fileId = "";
@@ -201,7 +202,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.textCompaction = function (p) {
             }
         }
     }
-    var p1 = { textCompactionData: textCompactionData, byteCompactionData: byteCompactionData, length: index, result: result }
+    var p1 = { textCompactionData: textCompactionData, byteCompactionData: byteCompactionData, length: index, result: result };
     ZXing.PDF417.Internal.DecodedBitStreamParser.decodeTextCompaction(p1);
     p.result = p1.result;
     return codeIndex;
@@ -354,11 +355,14 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decodeTextCompaction = function (p)
 ZXing.PDF417.Internal.DecodedBitStreamParser.byteCompaction = function (p) {
     var mode = p.mode, codewords = p.codewords, codeIndex = p.codeIndex;
     var decodedBytes = [];
+    var count = 0;
+    var value = 0;
+    var end = false;
     if (mode == 901) {
-        var count = 0;
-        var value = 0;
+        count = 0;
+        value = 0;
         var byteCompactedCodewords = new Int32Array(6);
-        var end = false;
+        end = false;
         var nextCode = codewords[codeIndex++];
         while ((codeIndex < codewords[0]) && !end) {
             byteCompactedCodewords[count++] = nextCode;
@@ -369,7 +373,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.byteCompaction = function (p) {
                 end = true;
             }
             else {
-                if ((count % 5 == 0) && (count > 0)) {
+                if ((count % 5 === 0) && (count > 0)) {
                     for (var j = 0; j < 6; ++j) {
                         decodedBytes.push((value >> (8 * (5 - j))));
                     }
@@ -383,11 +387,10 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.byteCompaction = function (p) {
         for (var i = 0; i < count; i++) {
             decodedBytes.push(byteCompactedCodewords[i]);
         }
-    }
-    else if (mode == 924) {
-        var count = 0;
-        var value = 0;
-        var end = false;
+    } else if (mode == 924) {
+        count = 0;
+        value = 0;
+        end = false;
         while (codeIndex < codewords[0] && !end) {
             var code = codewords[codeIndex++];
             if (code < 900) {
@@ -401,16 +404,15 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.byteCompaction = function (p) {
                 }
             }
             if ((count % 5 == 0) && (count > 0)) {
-                for (var j = 0; j < 6; ++j) {
-                    decodedBytes.push((value >> (8 * (5 - j))));
+                for (var j1 = 0; j1 < 6; ++j1) {
+                    decodedBytes.push((value >> (8 * (5 - j1))));
                 }
                 value = 0;
                 count = 0;
             }
         }
     }
-    var bytes = decodedBytes;
-    p.result += (String.fromCharCode.apply(null, bytes));
+    p.result += (String.fromCharCode.apply(null, decodedBytes));
     return codeIndex;
 };
 ZXing.PDF417.Internal.DecodedBitStreamParser.numericCompaction = function (p) {
@@ -434,10 +436,10 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.numericCompaction = function (p) {
                 end = true;
             }
         }
-        if (count % 15 == 0 || code == 902 || end) {
+        if (count % 15 === 0 || code === 902 || end) {
             if (count > 0) {
                 var s = ZXing.PDF417.Internal.DecodedBitStreamParser.decodeBase900toBase10(numericCodewords, count);
-                if (s == null)
+                if (!s)
                     return -1;
                 p.result += (s);
                 count = 0;

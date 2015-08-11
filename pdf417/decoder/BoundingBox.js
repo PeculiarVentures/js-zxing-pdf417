@@ -40,7 +40,7 @@ ZXing.PDF417.Internal.BoundingBox = function (image, topLeft, bottomLeft, topRig
 };
 ZXing.PDF417.Internal.BoundingBox.Create = function (image, topLeft, bottomLeft, topRight, bottomRight) {
     if (arguments.length > 1) {
-        if ((topLeft == null && topRight == null) || (bottomLeft == null && bottomRight == null) || (topLeft != null && bottomLeft == null) || (topRight != null && bottomRight == null)) {
+        if ((!topLeft && !topRight) || (!bottomLeft && !bottomRight) || (topLeft && !bottomLeft) || (topRight && !bottomRight)) {
             return null;
         }
         return new ZXing.PDF417.Internal.BoundingBox(image, topLeft, bottomLeft, topRight, bottomRight);
@@ -52,9 +52,9 @@ ZXing.PDF417.Internal.BoundingBox.CreateBoxed = function (box) {
     return new ZXing.PDF417.Internal.BoundingBox(box.image, box.TopLeft, box.BottomLeft, box.TopRight, box.BottomRight);
 };
 ZXing.PDF417.Internal.BoundingBox.merge = function (leftBox, rightBox) {
-    if (leftBox == null)
+    if (!leftBox)
         return rightBox;
-    if (rightBox == null)
+    if (!rightBox)
         return leftBox;
     return new ZXing.PDF417.Internal.BoundingBox(leftBox.image, leftBox.TopLeft, leftBox.BottomLeft, rightBox.TopRight, rightBox.BottomRight);
 };
@@ -95,11 +95,10 @@ ZXing.PDF417.Internal.BoundingBox.prototype.addMissingRows = function (missingSt
     return new ZXing.PDF417.Internal.BoundingBox(this.image, newTopLeft, newBottomLeft, newTopRight, newBottomRight);
 };
 ZXing.PDF417.Internal.BoundingBox.prototype.calculateMinMaxValues = function () {
-    if (this.TopLeft == null) {
+    if (!this.TopLeft) {
         this.TopLeft = new ZXing.ResultPoint(0, this.TopRight.y);
         this.BottomLeft = new ZXing.ResultPoint(0, this.BottomRight.y);
-    }
-    else if (this.TopRight == null) {
+    } else if (!this.TopRight) {
         this.TopRight = new ZXing.ResultPoint(this.image.width - 1, this.TopLeft.y);
         this.BottomRight = new ZXing.ResultPoint(this.image.width - 1, this.TopLeft.y);
     }

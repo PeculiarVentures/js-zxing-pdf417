@@ -35,7 +35,7 @@ ZXing.PDF417.Internal.EC.ModulusGF = function (modulus, generator) {
         this.expTable[i] = x;
         x = (x * generator) % modulus;
     }
-    for (var i = 0; i < modulus - 1; i++) {
+    for (i = 0; i < modulus - 1; i++) {
         this.logTable[this.expTable[i]] = i;
     }
     this.Zero = new ZXing.PDF417.Internal.EC.ModulusPoly(this, new Int32Array([0]));

@@ -22,53 +22,53 @@
 ///
 
 ZXing.Result = function (text, rawBytes, resultPoints, format, timestamp) {
-    this.Text = null;
-    this.RawBytes = null;
-    this.ResultPoints = null;
-    this.BarcodeFormat = ZXing.BarcodeFormat.AZTEC;
-    this.ResultMetadata = null;
-    this.Timestamp = 0;
-    if (text == null && rawBytes == null) {
-        throw new Error("Text and bytes are null");
-    }
-    this.Text = text;
-    this.RawBytes = rawBytes;
-    this.ResultPoints = resultPoints;
-    this.BarcodeFormat = format;
-    this.ResultMetadata = null;
-    this.Timestamp = timestamp || ((new Date().getTime() * 10000) + 621355968000000000);
+  this.Text = null;
+  this.RawBytes = null;
+  this.ResultPoints = null;
+  this.BarcodeFormat = ZXing.BarcodeFormat.AZTEC;
+  this.ResultMetadata = null;
+  this.Timestamp = 0;
+  if (!text&& !rawBytes) {
+    throw new Error("Text and bytes are null");
+  }
+  this.Text = text;
+  this.RawBytes = rawBytes;
+  this.ResultPoints = resultPoints;
+  this.BarcodeFormat = format;
+  this.ResultMetadata = null;
+  this.Timestamp = timestamp || ((new Date().getTime() * 10000) + 621355968000000000);
 };
 
 ZXing.Result.prototype.putMetadata = function (type, value) {
-    if (this.ResultMetadata == null) {
-        this.ResultMetadata = new Object();
-    }
-    this.ResultMetadata[type] = value;
+  if (!this.ResultMetadata) {
+    this.ResultMetadata = {};
+  }
+  this.ResultMetadata[type] = value;
 };
 ZXing.Result.prototype.putAllMetadata = function (metadata) {
-    if (metadata != null) {
-        if (this.ResultMetadata == null) {
-            this.ResultMetadata = metadata;
-        }
-        else {
-            for (var entry in metadata)
-                this.ResultMetadata[entry] = metadata[entry];
-        }
+  if (metadata) {
+    if (!this.ResultMetadata) {
+      this.ResultMetadata = metadata;
+    } else {
+      for(var entry in metadata) {
+        if (metadata.hasOwnProperty(entry))
+          this.ResultMetadata[entry] = metadata[entry];
+      }
     }
+  }
 };
 ZXing.Result.prototype.addResultPoints = function (newPoints) {
-    var oldPoints = this.ResultPoints;
-    if (oldPoints == null) {
-        this.ResultPoints = newPoints;
-    }
-    else if (newPoints != null && newPoints.length > 0) {
-        this.ResultPoints = oldPoints.concat(newPoints);
-    }
+  var oldPoints = this.ResultPoints;
+  if (!oldPoints) {
+    this.ResultPoints = newPoints;
+  } else if (newPoints && newPoints.length > 0) {
+    this.ResultPoints = oldPoints.concat(newPoints);
+  }
 };
 ZXing.Result.prototype.toString = function () {
-    if (this.Text == null) {
-        return "[" + this.RawBytes.length + " bytes]";
-    }
-    return this.Text;
+  if (!this.Text) {
+    return "[" + this.RawBytes.length + " bytes]";
+  }
+  return this.Text;
 };
 

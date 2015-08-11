@@ -123,13 +123,13 @@ ZXing.PDF417.Internal.PDF417ScanningDecoder.adjustBoundingBox = function (rowInd
         missingStartRows--;
     }
     var missingEndRows = 0;
-    for (var row = rowHeights.length - 1; row >= 0; row--) {
+    for (row = rowHeights.length - 1; row >= 0; row--) {
         missingEndRows += maxRowHeight - rowHeights[row];
         if (rowHeights[row] > 0) {
             break;
         }
     }
-    for (var row = codewords.length - 1; missingEndRows > 0 && codewords[row] == null; row--) {
+    for (row = codewords.length - 1; missingEndRows > 0 && codewords[row] == null; row--) {
         missingEndRows--;
     }
     return rowIndicatorColumn.Box.addMissingRows(missingStartRows, missingEndRows, rowIndicatorColumn.IsLeft);
@@ -241,12 +241,11 @@ ZXing.PDF417.Internal.PDF417ScanningDecoder.createDecoderResultFromAmbiguousValu
         if (ambiguousIndexCount.length == 0) {
             return null;
         }
-        for (var i = 0; i < ambiguousIndexCount.length; i++) {
+        for (i = 0; i < ambiguousIndexCount.length; i++) {
             if (ambiguousIndexCount[i] < ambiguousIndexValues[i].length - 1) {
                 ambiguousIndexCount[i]++;
                 break;
-            }
-            else {
+            } else {
                 ambiguousIndexCount[i] = 0;
                 if (i == ambiguousIndexCount.length - 1) {
                     return null;

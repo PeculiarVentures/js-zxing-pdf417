@@ -23,7 +23,7 @@
 
 ZXing.Binarizer = function (source) {
     this.source = null;
-    if (source == null) {
+    if (!source) {
         throw new Error("Source must be non-null.");
     }
     this.source = source;

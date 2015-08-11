@@ -31,7 +31,7 @@ ZXing.Common.DecoderResult = function (rawBytes, text, byteSegments, ecLevel, sa
     this.Erasures = 0;
     this.StructuredAppendParity = 0;
     this.Other = null;
-    if (rawBytes == null && text == null) {
+    if (rawBytes === null && text === null) {
         throw new Error();
     }
     this.RawBytes = rawBytes;

@@ -35,7 +35,7 @@ ZXing.InvertedLuminanceSource.prototype.getRow = function (y, row){
     return row;
 };
 ZXing.InvertedLuminanceSource.prototype.get_Matrix = function (){
-    if (this.invertedMatrix == null){
+    if (!this.invertedMatrix){
         var matrix = this.delegate.get_Matrix();
         var length = this.get_Width() * this.get_Height();
         this.invertedMatrix = new Uint8Array(length);

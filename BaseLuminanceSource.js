@@ -44,7 +44,7 @@ ZXing.BaseLuminanceSource = function (luminanceArray, width, height) {
 };
 ZXing.BaseLuminanceSource.prototype.getRow = function (y, row) {
     var width = this.get_Width();
-    if (row == null || row.length < width) {
+    if (!row || row.length < width) {
         row = new Uint8Array(width);
     }
     for (var i = 0; i < width; i++)
@@ -62,8 +62,7 @@ ZXing.BaseLuminanceSource.prototype.rotateCounterClockwise = function () {
     for (var yold = 0; yold < this.get_Height() ; yold++) {
         for (var xold = 0; xold < this.get_Width() ; xold++) {
             var ynew = newHeight - xold - 1;
-            var xnew = yold;
-            rotatedLuminances[ynew * newWidth + xnew] = localLuminances[yold * this.get_Width() + xold];
+            rotatedLuminances[ynew * newWidth + yold] = localLuminances[yold * this.get_Width() + xold];
         }
     }
     return this.CreateLuminanceSource(rotatedLuminances, newWidth, newHeight);

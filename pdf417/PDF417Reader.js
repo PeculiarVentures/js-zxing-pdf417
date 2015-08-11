@@ -26,7 +26,7 @@ ZXing.PDF417.PDF417Reader = function () {
 
 ZXing.PDF417.PDF417Reader.prototype.decode = function (image, hints) {
     var results = ZXing.PDF417.PDF417Reader.decode(image, hints || null, false);
-    if (results.length == 0) {
+    if (!results.length) {
         return null;
     }
     else {
@@ -39,12 +39,12 @@ ZXing.PDF417.PDF417Reader.prototype.decodeMultiple = function (image, hints) {
 ZXing.PDF417.PDF417Reader.decode = function (image, hints, multiple, dr) {
     var results = [];
     var detectorResult = dr || ZXing.PDF417.Internal.Detector.detectSingle(image, hints, multiple);
-    if (detectorResult != null) {
+    if (detectorResult) {
         var pointsList = detectorResult.Points;
         for (var $i = 0, $n = pointsList.length ; $i < $n; $i++) {
             var points = pointsList[$i];
             var decoderResult = ZXing.PDF417.Internal.PDF417ScanningDecoder.decode(detectorResult.Bits, points[4], points[5], points[6], points[7], ZXing.PDF417.PDF417Reader.getMinCodewordWidth(points), ZXing.PDF417.PDF417Reader.getMaxCodewordWidth(points));
-            if (decoderResult == null) {
+            if (!decoderResult) {
                 continue;
             }
             var result = new ZXing.Result(decoderResult.Text, decoderResult.RawBytes, points, ZXing.BarcodeFormat.PDF_417);
@@ -52,9 +52,8 @@ ZXing.PDF417.PDF417Reader.decode = function (image, hints, multiple, dr) {
             result.putMetadata("ERROR_CORRECTION_LEVEL", decoderResult.ECLevel);
             var pdf417ResultMetadata = decoderResult.Other instanceof ZXing.PDF417.PDF417ResultMetadata || decoderResult.Other == null ? decoderResult.Other : (function () {
                 throw new Error("InvalidCastException");
-            }
-            ());
-            if (pdf417ResultMetadata != null) {
+            }());
+            if (pdf417ResultMetadata) {
                 //result.putMetadata(ZXing.ResultMetadataType.PDF417_EXTRA_METADATA, pdf417ResultMetadata);
                 result.putMetadata("PDF417_EXTRA_METADATA", pdf417ResultMetadata);
             }
@@ -64,13 +63,13 @@ ZXing.PDF417.PDF417Reader.decode = function (image, hints, multiple, dr) {
     return results;
 };
 ZXing.PDF417.PDF417Reader.getMaxWidth = function (p1, p2) {
-    if (p1 == null || p2 == null) {
+    if (!p1 || !p2) {
         return 0;
     }
     return Math.abs(p1.x - p2.x);
 };
 ZXing.PDF417.PDF417Reader.getMinWidth = function (p1, p2) {
-    if (p1 == null || p2 == null) {
+    if (!p1 || !p2) {
         return 2147483647;
     }
     return Math.abs(p1.x - p2.x);
