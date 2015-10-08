@@ -1,7 +1,7 @@
 {
   "name": "js-zxing-pdf417",
   "version": "0.0.3",
-  "description": "Library to encrypt and decrypt data in JSON Web Encryption (JWE) format.",
+  "description": "Javascript port of the ZXing's PDF417 module.",
   "keywords": ["pdf417", "OCR", "zxing"],
   "license": "Apache-2.0",
   "repository": {
