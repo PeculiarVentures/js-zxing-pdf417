@@ -41,8 +41,8 @@ ZXing.BitmapLuminanceSource = function (bitmap, w, h) {
       data = bitmap.data;
     } else {
       canvas = w;
-      width = canvas.width;
-      height = canvas.height;
+      width = canvas.naturalWidth;
+      height = canvas.naturalHeight;
       var imageData = bitmap.getImageData(0, 0, width, height);
       data = imageData.data;
     }
