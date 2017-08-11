@@ -201,45 +201,46 @@ ZXing.SupportClass.Join = function (separator, origvalues) {
     return builder;
 };
 ZXing.SupportClass.Fill = function (array, value) {
-    for (var i = 0; i < array.length; i++) {
-        array[i] = value;
-    }
+  for(var i = 0; i < array.length; i++) {
+    array[i] = value;
+  }
 };
 ZXing.SupportClass.Fill = function (array, startIndex, endIndex, value) {
-    if (arguments.length < 4) {
-        value = startIndex;
-        for (var i = 0; i < array.length; i++) {
-            array[i] = value;
-        }
-    } else {
-        for (var i = startIndex; i < endIndex; i++) {
-            array[i] = value;
-        }
+  if (arguments.length < 4) {
+    value = startIndex;
+    for(var i = 0; i < array.length; i++) {
+        array[i] = value;
     }
+  } else {
+    for(var i1 = startIndex; i1 < endIndex; i1++) {
+      array[i1] = value;
+    }
+  }
 };
 ZXing.SupportClass.ToBinaryString = function (x) {
-    var bits = new Array(32);
-    var i = 0;
-    while (x != 0) {
-        bits[i++] = (x & 1) == 1 ? "1" : "0";
-        x >>= 1;
-    }
-    var rv = new Array(i);
-    for (var idx = 0; idx < i; idx++) {
-        rv.push(bits[idx]);
-    }
-    return rv.join("");
+  var bits = new Array(32);
+  var i = 0;
+  while (x) {
+    bits[i++] = (x & 1) == 1 ? "1" : "0";
+    x >>= 1;
+  }
+  var rv = new Array(i);
+  for(var idx = 0; idx < i; idx++) {
+    rv.push(bits[idx]);
+  }
+  return rv.join("");
 };
 ZXing.SupportClass.bitCount = function (n) {
-    var ret = 0;
-    while (n != 0) {
-        n &= (n - 1);
-        ret++;
-    }
-    return ret;
+  var ret = 0;
+  while (n) {
+    n &= (n - 1);
+    ret++;
+  }
+  return ret;
 };
 ZXing.SupportClass.GetValue = function (hintsv, hintType, def) {
-    if (hintsv.hasOwnProperty(hintType)) return hintsv[hintType]; return def;
+  if (hintsv.hasOwnProperty(hintType)) return hintsv[hintType];
+  return def;
 };
 
 
@@ -354,54 +355,54 @@ ZXing.BarcodeFormat = {
 ///
 
 ZXing.Result = function (text, rawBytes, resultPoints, format, timestamp) {
-    this.Text = null;
-    this.RawBytes = null;
-    this.ResultPoints = null;
-    this.BarcodeFormat = ZXing.BarcodeFormat.AZTEC;
-    this.ResultMetadata = null;
-    this.Timestamp = 0;
-    if (text == null && rawBytes == null) {
-        throw new Error("Text and bytes are null");
-    }
-    this.Text = text;
-    this.RawBytes = rawBytes;
-    this.ResultPoints = resultPoints;
-    this.BarcodeFormat = format;
-    this.ResultMetadata = null;
-    this.Timestamp = timestamp || ((new Date().getTime() * 10000) + 621355968000000000);
+  this.Text = null;
+  this.RawBytes = null;
+  this.ResultPoints = null;
+  this.BarcodeFormat = ZXing.BarcodeFormat.AZTEC;
+  this.ResultMetadata = null;
+  this.Timestamp = 0;
+  if (!text&& !rawBytes) {
+    throw new Error("Text and bytes are null");
+  }
+  this.Text = text;
+  this.RawBytes = rawBytes;
+  this.ResultPoints = resultPoints;
+  this.BarcodeFormat = format;
+  this.ResultMetadata = null;
+  this.Timestamp = timestamp || ((new Date().getTime() * 10000) + 621355968000000000);
 };
 
 ZXing.Result.prototype.putMetadata = function (type, value) {
-    if (this.ResultMetadata == null) {
-        this.ResultMetadata = new Object();
-    }
-    this.ResultMetadata[type] = value;
+  if (!this.ResultMetadata) {
+    this.ResultMetadata = {};
+  }
+  this.ResultMetadata[type] = value;
 };
 ZXing.Result.prototype.putAllMetadata = function (metadata) {
-    if (metadata != null) {
-        if (this.ResultMetadata == null) {
-            this.ResultMetadata = metadata;
-        }
-        else {
-            for (var entry in metadata)
-                this.ResultMetadata[entry] = metadata[entry];
-        }
+  if (metadata) {
+    if (!this.ResultMetadata) {
+      this.ResultMetadata = metadata;
+    } else {
+      for(var entry in metadata) {
+        if (metadata.hasOwnProperty(entry))
+          this.ResultMetadata[entry] = metadata[entry];
+      }
     }
+  }
 };
 ZXing.Result.prototype.addResultPoints = function (newPoints) {
-    var oldPoints = this.ResultPoints;
-    if (oldPoints == null) {
-        this.ResultPoints = newPoints;
-    }
-    else if (newPoints != null && newPoints.length > 0) {
-        this.ResultPoints = oldPoints.concat(newPoints);
-    }
+  var oldPoints = this.ResultPoints;
+  if (!oldPoints) {
+    this.ResultPoints = newPoints;
+  } else if (newPoints && newPoints.length > 0) {
+    this.ResultPoints = oldPoints.concat(newPoints);
+  }
 };
 ZXing.Result.prototype.toString = function () {
-    if (this.Text == null) {
-        return "[" + this.RawBytes.length + " bytes]";
-    }
-    return this.Text;
+  if (!this.Text) {
+    return "[" + this.RawBytes.length + " bytes]";
+  }
+  return this.Text;
 };
 
 
@@ -473,16 +474,16 @@ ZXing.DecodeHintType = {
 ZXing.BinaryBitmap = function (binarizer) {
     this.binarizer = null;
     this.matrix = null;
-    if (binarizer instanceof ZXing.Binarizer
-        || binarizer instanceof ZXing.Common.HybridBinarizer
-        || binarizer instanceof ZXing.Common.GlobalHistogramBinarizer) {
-        if (binarizer == null) {
+    if (binarizer instanceof ZXing.Binarizer ||
+        binarizer instanceof ZXing.Common.HybridBinarizer ||
+        binarizer instanceof ZXing.Common.GlobalHistogramBinarizer) {
+        if (!binarizer) {
             throw new Error("Binarizer must be non-null.");
         }
         this.binarizer = binarizer;
     } else {
         var matrix = binarizer;
-        if (matrix == null) {
+        if (matrix) {
             throw new Error("parameter must be non-null.");
         }
         this.matrix = matrix;
@@ -498,7 +499,7 @@ ZXing.BinaryBitmap.prototype.getBlackRow = function (y, row) {
     return this.binarizer.getBlackRow(y, row);
 };
 ZXing.BinaryBitmap.prototype.get_BlackMatrix = function () {
-    return (this.matrix != null ? this.matrix : (this.matrix = this.binarizer.get_BlackMatrix()));
+    return (this.matrix ? this.matrix : (this.matrix = this.binarizer.get_BlackMatrix()));
 };
 ZXing.BinaryBitmap.prototype.get_CropSupported = function () {
     return this.binarizer.get_LuminanceSource().get_CropSupported();
@@ -520,7 +521,7 @@ ZXing.BinaryBitmap.prototype.rotateCounterClockwise45 = function () {
 };
 ZXing.BinaryBitmap.prototype.toString = function () {
     var blackMatrix = this.get_BlackMatrix();
-    return blackMatrix != null ? blackMatrix.toString() : "";
+    return blackMatrix ? blackMatrix.toString() : "";
 };
 
 
@@ -549,7 +550,7 @@ ZXing.BinaryBitmap.prototype.toString = function () {
 
 ZXing.Binarizer = function (source) {
     this.source = null;
-    if (source == null) {
+    if (!source) {
         throw new Error("Source must be non-null.");
     }
     this.source = source;
@@ -597,7 +598,7 @@ ZXing.ResultPoint = function (x, y) {
 
 ZXing.ResultPoint.prototype.Equals = function (other) {
     var otherPoint = other instanceof ZXing.ResultPoint ? other : null;
-    if (otherPoint == null)
+    if (!otherPoint)
         return false;
     return this.x == otherPoint.x && this.y == otherPoint.y;
 };
@@ -771,7 +772,7 @@ ZXing.InvertedLuminanceSource.prototype.getRow = function (y, row){
     return row;
 };
 ZXing.InvertedLuminanceSource.prototype.get_Matrix = function (){
-    if (this.invertedMatrix == null){
+    if (!this.invertedMatrix){
         var matrix = this.delegate.get_Matrix();
         var length = this.get_Width() * this.get_Height();
         this.invertedMatrix = new Uint8Array(length);
@@ -847,7 +848,7 @@ ZXing.BaseLuminanceSource = function (luminanceArray, width, height) {
 };
 ZXing.BaseLuminanceSource.prototype.getRow = function (y, row) {
     var width = this.get_Width();
-    if (row == null || row.length < width) {
+    if (!row || row.length < width) {
         row = new Uint8Array(width);
     }
     for (var i = 0; i < width; i++)
@@ -865,8 +866,7 @@ ZXing.BaseLuminanceSource.prototype.rotateCounterClockwise = function () {
     for (var yold = 0; yold < this.get_Height() ; yold++) {
         for (var xold = 0; xold < this.get_Width() ; xold++) {
             var ynew = newHeight - xold - 1;
-            var xnew = yold;
-            rotatedLuminances[ynew * newWidth + xnew] = localLuminances[yold * this.get_Width() + xold];
+            rotatedLuminances[ynew * newWidth + yold] = localLuminances[yold * this.get_Width() + xold];
         }
     }
     return this.CreateLuminanceSource(rotatedLuminances, newWidth, newHeight);
@@ -929,65 +929,65 @@ $Inherit(ZXing.BaseLuminanceSource, ZXing.LuminanceSource);
 
 ZXing.BitmapLuminanceSource = function (bitmap, w, h) {
 
-    var debug = typeof window != 'undefined' && window.__debug === true;
-
-    if (typeof bitmap == 'number') {
-        var width = bitmap
-            , height = w;
-        ZXing.BaseLuminanceSource.call(this, width, height);
+  var debug = typeof window != 'undefined' && window.__debug === true;
+  var width, height;
+  if (typeof bitmap == 'number') {
+    width = bitmap;
+    height = w;
+    ZXing.BaseLuminanceSource.call(this, width, height);
+  } else {
+    var canvas, data;
+    if (bitmap instanceof Uint8ClampedArray) {
+      width = w;
+      height = h;
+      data = bitmap;
+    } else if (bitmap instanceof ImageData) {
+      width = w || bitmap.width;
+      height = h || bitmap.height;
+      data = bitmap.data;
     } else {
-        var width, height, canvas, data;
-        if (bitmap instanceof Uint8ClampedArray) {
-            width = w;
-            height = h;
-            data = bitmap;
-        } else if (bitmap instanceof ImageData) {
-            width = w || bitmap.width;
-            height = h || bitmap.height;
-            data = bitmap.data;
-        } else {
-            canvas = w;
-            width = canvas.width;
-            height = canvas.height;
-            var imageData = bitmap.getImageData(0, 0, width, height);
-            data = imageData.data;
-        }
-        ZXing.BaseLuminanceSource.call(this, width, height);
-
-        var stride = Math.abs(data.length / height);
-
-        if(debug) this.debugBitmap = [];
-        //console.time("luminances")
-        for (var y = 0; y < height; y++) {
-            var strideOffset = y * stride;
-
-            var maxIndex = (4 * width) + strideOffset;
-            for (var x = strideOffset; x < maxIndex; x += 4) {
-                var luminance = ((7424 * data[x] + 38550 * data[x + 1] + 19562 * data[x + 2]) >> 16);
-                //var alpha = data[x + 3];
-                //luminance = (((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8) + 1);
-
-                //luminance = luminance < 50 ? 1 : (luminance > 90 ? 255 : luminance)
-
-                this.luminances.push(luminance);
-                if (debug) {
-                    this.debugBitmap.push(luminance);
-                    this.debugBitmap.push(luminance);
-                    this.debugBitmap.push(luminance);
-                    this.debugBitmap.push(255);
-                }
-            }
-        }
-        //console.timeEnd("luminances")
+      canvas = w;
+      width = canvas.naturalWidth;
+      height = canvas.naturalHeight;
+      var imageData = bitmap.getImageData(0, 0, width, height);
+      data = imageData.data;
     }
+    ZXing.BaseLuminanceSource.call(this, width, height);
+
+    var stride = Math.abs(data.length / height);
+
+    if (debug) this.debugBitmap = [];
+    //console.time("luminances")
+    for(var y = 0; y < height; y++) {
+      var strideOffset = y * stride;
+
+      var maxIndex = (4 * width) + strideOffset;
+      for(var x = strideOffset; x < maxIndex; x += 4) {
+        var luminance = ((7424 * data[x] + 38550 * data[x + 1] + 19562 * data[x + 2]) >> 16);
+        //var alpha = data[x + 3];
+        //luminance = (((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8) + 1);
+
+        //luminance = luminance < 50 ? 1 : (luminance > 90 ? 255 : luminance)
+
+        this.luminances.push(luminance);
+        if (debug) {
+          this.debugBitmap.push(luminance);
+          this.debugBitmap.push(luminance);
+          this.debugBitmap.push(luminance);
+          this.debugBitmap.push(255);
+        }
+      }
+    }
+    //console.timeEnd("luminances")
+  }
 };
 
 ZXing.BitmapLuminanceSource.prototype.CreateLuminanceSource = function (newLuminances, width, height) {
-    return (function () {
-        var $v1 = new ZXing.BitmapLuminanceSource(width, height);
-        $v1.luminances = newLuminances;
-        return $v1;
-    }).call(this);
+  return (function () {
+    var $v1 = new ZXing.BitmapLuminanceSource(width, height);
+    $v1.luminances = newLuminances;
+    return $v1;
+  }).call(this);
 };
 
 $Inherit(ZXing.BitmapLuminanceSource, ZXing.BaseLuminanceSource);
@@ -1025,7 +1025,7 @@ ZXing.Common.DecoderResult = function (rawBytes, text, byteSegments, ecLevel, sa
     this.Erasures = 0;
     this.StructuredAppendParity = 0;
     this.Other = null;
-    if (rawBytes == null && text == null) {
+    if (rawBytes === null && text === null) {
         throw new Error();
     }
     this.RawBytes = rawBytes;
@@ -1042,7 +1042,6 @@ ZXing.Common.DecoderResult = function (rawBytes, text, byteSegments, ecLevel, sa
 //
 //desertconsulting@gmail.com, https://github.com/PeculiarVentures/idscanjs
 //
-
 
 
 //
@@ -1062,239 +1061,241 @@ ZXing.Common.DecoderResult = function (rawBytes, text, byteSegments, ecLevel, sa
 
 
 ZXing.Common.BitArray = function (bits, size) {
-    this.bits = null;
-    this.size = 0;
-    this.size = arguments.length == 2 ? size : bits ? bits : 0;
-    if (this.size < 1) {
-        throw new Error("size must be at least 1");
-    }
-    this.bits = arguments.length == 2 ? bits : this.size ? ZXing.Common.BitArray.makeArray(this.size) : [];
+  this.bits = null;
+  this.size = 0;
+  this.size = arguments.length == 2 ? size : bits ? bits : 0;
+  if (this.size < 1) {
+    throw new Error("size must be at least 1");
+  }
+  this.bits = arguments.length == 2 ? bits : this.size ? ZXing.Common.BitArray.makeArray(this.size) : [];
 };
 ZXing.Common.BitArray._lookup = new Int32Array([32, 0, 1, 26, 2, 23, 27, 0, 3, 16, 24, 30, 28, 11, 0, 13, 4, 7, 17, 0, 25, 22, 31, 15, 29, 10, 12, 6, 0, 21, 14, 9, 5, 20, 8, 19, 18]);
 ZXing.Common.BitArray.prototype.get_Size = function () {
-    return this.size;
+  return this.size;
 };
 ZXing.Common.BitArray.prototype.get_SizeInBytes = function () {
-    return (this.size + 7) >> 3;
+  return (this.size + 7) >> 3;
 };
 ZXing.Common.BitArray.prototype.get_Item = function (i) {
-    return (this.bits[i >> 5] & (1 << (i & 31))) != 0;
+  return (this.bits[i >> 5] & (1 << (i & 31))) != 0;
 };
 ZXing.Common.BitArray.prototype.set_Item = function (i, value) {
-    if (value)
-        this.bits[i >> 5] |= 1 << (i & 31);
+  if (value)
+    this.bits[i >> 5] |= 1 << (i & 31);
 };
 ZXing.Common.BitArray.prototype.ensureCapacity = function (size) {
-    if (size > this.bits.length << 5) {
-        var newBits = this.bits.slice(0);
-        this.bits = newBits;
-    }
+  var that = this,
+    bits = that.bits;
+
+  if (size > bits.length << 5) {
+    that.bits = bits.slice(0);
+  }
 };
 ZXing.Common.BitArray.prototype.flip = function (i) {
-    this.bits[i >> 5] ^= 1 << (i & 31);
+  this.bits[i >> 5] ^= 1 << (i & 31);
 };
 ZXing.Common.BitArray.numberOfTrailingZeros = function (num) {
-    var index = (-num & num) % 37;
-    if (index < 0)
-        index *= -1;
-    return ZXing.Common.BitArray._lookup[index];
+  var index = (-num & num) % 37;
+  if (index < 0)
+    index *= -1;
+  return ZXing.Common.BitArray._lookup[index];
 };
 ZXing.Common.BitArray.prototype.getNextSet = function (from) {
-    if (from >= this.size) {
-        return this.size;
+  if (from >= this.size) {
+    return this.size;
+  }
+  var bitsOffset = from >> 5;
+  var currentBits = this.bits[bitsOffset];
+  currentBits &= ~((1 << (from & 31)) - 1);
+  while (currentBits == 0) {
+    if (++bitsOffset == this.bits.length) {
+      return this.size;
     }
-    var bitsOffset = from >> 5;
-    var currentBits = this.bits[bitsOffset];
-    currentBits &= ~((1 << (from & 31)) - 1);
-    while (currentBits == 0) {
-        if (++bitsOffset == this.bits.length) {
-            return this.size;
-        }
-        currentBits = this.bits[bitsOffset];
-    }
-    var result = (bitsOffset << 5) + ZXing.Common.BitArray.numberOfTrailingZeros(currentBits);
-    return result > this.size ? this.size : result;
+    currentBits = this.bits[bitsOffset];
+  }
+  var result = (bitsOffset << 5) + ZXing.Common.BitArray.numberOfTrailingZeros(currentBits);
+  return result > this.size ? this.size : result;
 };
 ZXing.Common.BitArray.prototype.getNextUnset = function (from) {
-    if (from >= this.size) {
-        return this.size;
+  if (from >= this.size) {
+    return this.size;
+  }
+  var bitsOffset = from >> 5;
+  var currentBits = ~this.bits[bitsOffset];
+  currentBits &= ~((1 << (from & 31)) - 1);
+  while (currentBits == 0) {
+    if (++bitsOffset == this.bits.length) {
+      return this.size;
     }
-    var bitsOffset = from >> 5;
-    var currentBits = ~this.bits[bitsOffset];
-    currentBits &= ~((1 << (from & 31)) - 1);
-    while (currentBits == 0) {
-        if (++bitsOffset == this.bits.length) {
-            return this.size;
-        }
-        currentBits = ~this.bits[bitsOffset];
-    }
-    var result = (bitsOffset << 5) + ZXing.Common.BitArray.numberOfTrailingZeros(currentBits);
-    return result > this.size ? this.size : result;
+    currentBits = ~this.bits[bitsOffset];
+  }
+  var result = (bitsOffset << 5) + ZXing.Common.BitArray.numberOfTrailingZeros(currentBits);
+  return result > this.size ? this.size : result;
 };
 ZXing.Common.BitArray.prototype.setBulk = function (i, newBits) {
-    this.bits[i >> 5] = newBits;
+  this.bits[i >> 5] = newBits;
 };
 ZXing.Common.BitArray.prototype.setRange = function (start, end) {
-    if (end < start) {
-        throw new Error("start after end");
+  if (end < start) {
+    throw new Error("start after end");
+  }
+  if (end == start) {
+    return;
+  }
+  end--;
+  var firstInt = start >> 5;
+  var lastInt = end >> 5;
+  for(var i = firstInt; i <= lastInt; i++) {
+    var firstBit = i > firstInt ? 0 : start & 31;
+    var lastBit = i < lastInt ? 31 : end & 31;
+    var mask;
+    if (firstBit == 0 && lastBit == 31) {
+      mask = -1;
+    } else {
+      mask = 0;
+      for(var j = firstBit; j <= lastBit; j++) {
+        mask |= 1 << j;
+      }
     }
-    if (end == start) {
-        return;
-    }
-    end--;
-    var firstInt = start >> 5;
-    var lastInt = end >> 5;
-    for (var i = firstInt; i <= lastInt; i++) {
-        var firstBit = i > firstInt ? 0 : start & 31;
-        var lastBit = i < lastInt ? 31 : end & 31;
-        var mask;
-        if (firstBit == 0 && lastBit == 31) {
-            mask = -1;
-        } else {
-            mask = 0;
-            for (var j = firstBit; j <= lastBit; j++) {
-                mask |= 1 << j;
-            }
-        }
-        this.bits[i] |= mask;
-    }
+    this.bits[i] |= mask;
+  }
 };
 ZXing.Common.BitArray.prototype.clear = function () {
-    var max = this.bits.length;
-    for (var i = 0; i < max; i++) {
-        this.bits[i] = 0;
-    }
+  var max = this.bits.length;
+  for(var i = 0; i < max; i++) {
+    this.bits[i] = 0;
+  }
 };
 ZXing.Common.BitArray.prototype.isRange = function (start, end, value) {
-    if (end < start) {
-        throw new Error();
-    }
-    if (end == start) {
-        return true;
-    }
-    end--;
-    var firstInt = start >> 5;
-    var lastInt = end >> 5;
-    for (var i = firstInt; i <= lastInt; i++) {
-        var firstBit = i > firstInt ? 0 : start & 31;
-        var lastBit = i < lastInt ? 31 : end & 31;
-        var mask;
-        if (firstBit == 0 && lastBit == 31) {
-            mask = -1;
-        } else {
-            mask = 0;
-            for (var j = firstBit; j <= lastBit; j++) {
-                mask |= 1 << j;
-            }
-        }
-        if ((this.bits[i] & mask) != (value ? mask : 0)) {
-            return false;
-        }
-    }
+  if (end < start) {
+    throw new Error();
+  }
+  if (end == start) {
     return true;
+  }
+  end--;
+  var firstInt = start >> 5;
+  var lastInt = end >> 5;
+  for(var i = firstInt; i <= lastInt; i++) {
+    var firstBit = i > firstInt ? 0 : start & 31;
+    var lastBit = i < lastInt ? 31 : end & 31;
+    var mask;
+    if (firstBit == 0 && lastBit == 31) {
+      mask = -1;
+    } else {
+      mask = 0;
+      for(var j = firstBit; j <= lastBit; j++) {
+        mask |= 1 << j;
+      }
+    }
+    if ((this.bits[i] & mask) != (value ? mask : 0)) {
+      return false;
+    }
+  }
+  return true;
 };
 ZXing.Common.BitArray.prototype.appendBit = function (bit) {
-    this.ensureCapacity(this.size + 1);
-    if (bit) {
-        this.bits[this.size >> 5] |= 1 << (this.size & 31);
-    }
-    this.size++;
+  this.ensureCapacity(this.size + 1);
+  if (bit) {
+    this.bits[this.size >> 5] |= 1 << (this.size & 31);
+  }
+  this.size++;
 };
 ZXing.Common.BitArray.prototype.get_Array = function () {
-    return this.bits;
+  return this.bits;
 };
 ZXing.Common.BitArray.prototype.appendBits = function (value, numBits) {
-    if (numBits < 0 || numBits > 32) {
-        throw new Error("Num bits must be between 0 and 32");
-    }
-    this.ensureCapacity(this.size + numBits);
-    for (var numBitsLeft = numBits; numBitsLeft > 0; numBitsLeft--) {
-        this.appendBit(((value >> (numBitsLeft - 1)) & 1) == 1);
-    }
+  if (numBits < 0 || numBits > 32) {
+    throw new Error("Num bits must be between 0 and 32");
+  }
+  this.ensureCapacity(this.size + numBits);
+  for(var numBitsLeft = numBits; numBitsLeft > 0; numBitsLeft--) {
+    this.appendBit(((value >> (numBitsLeft - 1)) & 1) == 1);
+  }
 };
 ZXing.Common.BitArray.prototype.appendBitArray = function (other) {
-    var otherSize = other.size;
-    this.ensureCapacity(this.size + otherSize);
-    for (var i = 0; i < otherSize; i++) {
-        this.appendBit(other.get_Item(i));
-    }
+  var otherSize = other.size;
+  this.ensureCapacity(this.size + otherSize);
+  for(var i = 0; i < otherSize; i++) {
+    this.appendBit(other.get_Item(i));
+  }
 };
 ZXing.Common.BitArray.prototype.xor = function (other) {
-    if (this.bits.length != other.bits.length) {
-        throw new Error("Sizes don\'t match");
-    }
-    for (var i = 0; i < this.bits.length; i++) {
-        this.bits[i] ^= other.bits[i];
-    }
+  if (this.bits.length != other.bits.length) {
+    throw new Error("Sizes don\'t match");
+  }
+  for(var i = 0; i < this.bits.length; i++) {
+    this.bits[i] ^= other.bits[i];
+  }
 };
 ZXing.Common.BitArray.prototype.toBytes = function (bitOffset, array, offset, numBytes) {
-    for (var i = 0; i < numBytes; i++) {
-        var theByte = 0;
-        for (var j = 0; j < 8; j++) {
-            if (this.get_Item(bitOffset)) {
-                theByte |= 1 << (7 - j);
-            }
-            bitOffset++;
-        }
-        array[offset + i] = theByte;
+  for(var i = 0; i < numBytes; i++) {
+    var theByte = 0;
+    for(var j = 0; j < 8; j++) {
+      if (this.get_Item(bitOffset)) {
+        theByte |= 1 << (7 - j);
+      }
+      bitOffset++;
     }
+    array[offset + i] = theByte;
+  }
 };
 ZXing.Common.BitArray.prototype.reverse = function () {
-    var newBits = [];
-    var len = ((this.size - 1) >> 5);
-    var oldBitsLen = len + 1;
-    for (var i = 0; i < oldBitsLen; i++) {
-        var x = this.bits[i];
-        x = ((x >> 1) & 1431655765) | ((x & 1431655765) << 1);
-        x = ((x >> 2) & 858993459) | ((x & 858993459) << 2);
-        x = ((x >> 4) & 252645135) | ((x & 252645135) << 4);
-        x = ((x >> 8) & 16711935) | ((x & 16711935) << 8);
-        x = ((x >> 16) & 65535) | ((x & 65535) << 16);
-        newBits[len - i] = x;
+  var newBits = [];
+  var len = ((this.size - 1) >> 5);
+  var oldBitsLen = len + 1;
+  for(var i = 0; i < oldBitsLen; i++) {
+    var x = this.bits[i];
+    x = ((x >> 1) & 1431655765) | ((x & 1431655765) << 1);
+    x = ((x >> 2) & 858993459) | ((x & 858993459) << 2);
+    x = ((x >> 4) & 252645135) | ((x & 252645135) << 4);
+    x = ((x >> 8) & 16711935) | ((x & 16711935) << 8);
+    x = ((x >> 16) & 65535) | ((x & 65535) << 16);
+    newBits[len - i] = x;
+  }
+  if (this.size != oldBitsLen * 32) {
+    var leftOffset = oldBitsLen * 32 - this.size;
+    var mask = 1;
+    for(var i1 = 0; i1 < 31 - leftOffset; i1++)
+      mask = (mask << 1) | 1;
+    var currentInt = (newBits[0] >> leftOffset) & mask;
+    for(var i2 = 1; i2 < oldBitsLen; i2++) {
+      var nextInt = newBits[i2];
+      currentInt |= nextInt << (32 - leftOffset);
+      newBits[i2 - 1] = currentInt;
+      currentInt = (nextInt >> leftOffset) & mask;
     }
-    if (this.size != oldBitsLen * 32) {
-        var leftOffset = oldBitsLen * 32 - this.size;
-        var mask = 1;
-        for (var i = 0; i < 31 - leftOffset; i++)
-            mask = (mask << 1) | 1;
-        var currentInt = (newBits[0] >> leftOffset) & mask;
-        for (var i = 1; i < oldBitsLen; i++) {
-            var nextInt = newBits[i];
-            currentInt |= nextInt << (32 - leftOffset);
-            newBits[i - 1] = currentInt;
-            currentInt = (nextInt >> leftOffset) & mask;
-        }
-        newBits[oldBitsLen - 1] = currentInt;
-    }
-    this.bits = newBits;
+    newBits[oldBitsLen - 1] = currentInt;
+  }
+  this.bits = newBits;
 };
 ZXing.Common.BitArray.makeArray = function (size) {
-    return ZeroFilledInt32Array((size + 31) >> 5);
+  return ZeroFilledInt32Array((size + 31) >> 5);
 };
 ZXing.Common.BitArray.prototype.Equals = function (o) {
-    var other = o instanceof ZXing.Common.BitArray ? o : null;
-    if (other == null)
-        return false;
-    if (this.size != other.size)
-        return false;
-    for (var index = 0; index < this.size; index++) {
-        if (this.bits[index] != other.bits[index])
-            return false;
-    }
-    return true;
+  var other = o instanceof ZXing.Common.BitArray ? o : null;
+  if (other == null)
+    return false;
+  if (this.size != other.size)
+    return false;
+  for(var index = 0; index < this.size; index++) {
+    if (this.bits[index] != other.bits[index])
+      return false;
+  }
+  return true;
 };
 ZXing.Common.BitArray.prototype.toString = function () {
-    var result = "";
-    for (var i = 0; i < this.size; i++) {
-        if ((i & 7) == 0) {
-            result += " ";
-        }
-        result += (this.get_Item(i) ? "X" : ".");
+  var result = "";
+  for(var i = 0; i < this.size; i++) {
+    if ((i & 7) == 0) {
+      result += " ";
     }
-    return result;
+    result += (this.get_Item(i) ? "X" : ".");
+  }
+  return result;
 };
 ZXing.Common.BitArray.prototype.Clone = function () {
-    return new ZXing.Common.BitArray(this.bits.slice(0), this.size);
+  return new ZXing.Common.BitArray(this.bits.slice(0), this.size);
 };
 
 
@@ -1322,293 +1323,293 @@ ZXing.Common.BitArray.prototype.Clone = function () {
 ///
 
 ZXing.Common.BitMatrix = function (width, height, rowSize, bits) {
-    this.width = 0;
-    this.height = 0;
-    this.rowSize = 0;
-    this.bits = null;
+  this.width = 0;
+  this.height = 0;
+  this.rowSize = 0;
+  this.bits = null;
 
-    if (width < 1 || typeof height != 'undefined' && height < 1) {
-        throw new Error("Both dimensions must be greater than 0");
-    }
+  if (width < 1 || typeof height != 'undefined' && height < 1) {
+    throw new Error("Both dimensions must be greater than 0");
+  }
 
-    this.width = width;
-    this.height = arguments.length > 1 ? height : width;
-    this.rowSize = arguments.length == 4 ? rowSize : (width + 31) >> 5;
-    this.bits = arguments.length == 4 ? bits : arguments.length == 3 ? rowSize : new Int32Array(this.rowSize * this.height);;
+  this.width = width;
+  this.height = arguments.length > 1 ? height : width;
+  this.rowSize = arguments.length == 4 ? rowSize : (width + 31) >> 5;
+  this.bits = arguments.length == 4 ? bits : arguments.length == 3 ? rowSize : new Int32Array(this.rowSize * this.height);
 };
 
 
 ZXing.Common.BitMatrix.prototype.get_Width = function () {
-    return this.width;
+  return this.width;
 };
 ZXing.Common.BitMatrix.prototype.get_Height = function () {
-    return this.height;
+  return this.height;
 };
 ZXing.Common.BitMatrix.prototype.get_Dimension = function () {
-    if (this.width != this.height) {
-        throw new Error("Can\'t call Dimension on a non-square matrix");
-    }
-    return this.width;
+  if (this.width != this.height) {
+    throw new Error("Can\'t call Dimension on a non-square matrix");
+  }
+  return this.width;
 };
 ZXing.Common.BitMatrix.prototype.get_RowSize = function () {
-    return this.rowSize;
+  return this.rowSize;
 };
 ZXing.Common.BitMatrix.parse = function (stringRepresentation, setString, unsetString) {
-    if (stringRepresentation == null) {
-        throw new Error();
-    }
-    var bits = new Array(stringRepresentation.length);
-    var bitsPos = 0;
-    var rowStartPos = 0;
-    var rowLength = -1;
-    var nRows = 0;
-    var pos = 0;
-    while (pos < stringRepresentation.length) {
-        if (stringRepresentation.substr(pos, 1) == "\n" || stringRepresentation.substr(pos, 1) == "\r") {
-            if (bitsPos > rowStartPos) {
-                if (rowLength == -1) {
-                    rowLength = bitsPos - rowStartPos;
-                } else if (bitsPos - rowStartPos != rowLength) {
-                    throw new Error("row lengths do not match");
-                }
-                rowStartPos = bitsPos;
-                nRows++;
-            }
-            pos++;
-        }
-        else if (stringRepresentation.substr(pos, setString.length) == setString) {
-            pos += setString.length;
-            bits[bitsPos] = true;
-            bitsPos++;
-        }
-        else if (stringRepresentation.substr(pos, unsetString.length) == unsetString) {
-            pos += unsetString.length;
-            bits[bitsPos] = false;
-            bitsPos++;
-        }
-        else {
-            throw new Error("illegal character encountered: " + stringRepresentation.substr(pos));
-        }
-    }
-    if (bitsPos > rowStartPos) {
+  if (stringRepresentation == null) {
+    throw new Error();
+  }
+  var bits = new Array(stringRepresentation.length);
+  var bitsPos = 0;
+  var rowStartPos = 0;
+  var rowLength = -1;
+  var nRows = 0;
+  var pos = 0;
+  while (pos < stringRepresentation.length) {
+    if (stringRepresentation.substr(pos, 1) == "\n" || stringRepresentation.substr(pos, 1) == "\r") {
+      if (bitsPos > rowStartPos) {
         if (rowLength == -1) {
-            rowLength = bitsPos - rowStartPos;
+          rowLength = bitsPos - rowStartPos;
+        } else if (bitsPos - rowStartPos != rowLength) {
+          throw new Error("row lengths do not match");
         }
-        else if (bitsPos - rowStartPos != rowLength) {
-            throw new Error("row lengths do not match");
-        }
+        rowStartPos = bitsPos;
         nRows++;
+      }
+      pos++;
     }
-    var matrix = new ZXing.Common.BitMatrix(rowLength, nRows);
-    for (var i = 0; i < bitsPos; i++) {
-        if (bits[i]) {
-            matrix.set_Item(i % rowLength, Math.floor(i / rowLength), true);
-        }
+    else if (stringRepresentation.substr(pos, setString.length) == setString) {
+      pos += setString.length;
+      bits[bitsPos] = true;
+      bitsPos++;
     }
-    return matrix;
+    else if (stringRepresentation.substr(pos, unsetString.length) == unsetString) {
+      pos += unsetString.length;
+      bits[bitsPos] = false;
+      bitsPos++;
+    }
+    else {
+      throw new Error("illegal character encountered: " + stringRepresentation.substr(pos));
+    }
+  }
+  if (bitsPos > rowStartPos) {
+    if (rowLength == -1) {
+      rowLength = bitsPos - rowStartPos;
+    }
+    else if (bitsPos - rowStartPos != rowLength) {
+      throw new Error("row lengths do not match");
+    }
+    nRows++;
+  }
+  var matrix = new ZXing.Common.BitMatrix(rowLength, nRows);
+  for(var i = 0; i < bitsPos; i++) {
+    if (bits[i]) {
+      matrix.set_Item(i % rowLength, Math.floor(i / rowLength), true);
+    }
+  }
+  return matrix;
 };
 ZXing.Common.BitMatrix.prototype.get_Item = function (x, y) {
-    var offset = y * this.rowSize + (x >> 5);
-    return (((this.bits[offset]) >> (x & 31)) & 1) != 0;
+  var offset = y * this.rowSize + (x >> 5);
+  return (((this.bits[offset]) >> (x & 31)) & 1) != 0;
 };
 ZXing.Common.BitMatrix.prototype.set_Item = function (x, y, value) {
-    if (value) {
-        var offset = y * this.rowSize + (x >> 5);
-        this.bits[offset] |= 1 << (x & 31);
-    }
-    else {
-        var offset = y * this.rowSize + Math.floor((x / 32));
-        this.bits[offset] &= ~(1 << (x & 31));
-    }
+  var offset;
+  if (value) {
+    offset = y * this.rowSize + (x >> 5);
+    this.bits[offset] |= 1 << (x & 31);
+  } else {
+    offset = y * this.rowSize + Math.floor((x / 32));
+    this.bits[offset] &= ~(1 << (x & 31));
+  }
 };
 ZXing.Common.BitMatrix.prototype.flip = function (x, y) {
-    var offset = y * this.rowSize + (x >> 5);
-    this.bits[offset] ^= 1 << (x & 31);
+  var offset = y * this.rowSize + (x >> 5);
+  this.bits[offset] ^= 1 << (x & 31);
 };
 ZXing.Common.BitMatrix.prototype.xor = function (mask) {
-    if (this.width != mask.get_Width() || this.height != mask.get_Height() || this.rowSize != mask.get_RowSize()) {
-        throw new Error("input matrix dimensions do not match");
+  if (this.width != mask.get_Width() || this.height != mask.get_Height() || this.rowSize != mask.get_RowSize()) {
+    throw new Error("input matrix dimensions do not match");
+  }
+  var rowArray = new ZXing.Common.BitArray(Math.floor(this.width / 32) + 1);
+  for(var y = 0; y < this.height; y++) {
+    var offset = y * this.rowSize;
+    var row = mask.getRow(y, rowArray).get_Array();
+    for(var x = 0; x < this.rowSize; x++) {
+      this.bits[offset + x] ^= row[x];
     }
-    var rowArray = new ZXing.Common.BitArray(Math.floor(this.width / 32) + 1);
-    for (var y = 0; y < this.height; y++) {
-        var offset = y * this.rowSize;
-        var row = mask.getRow(y, rowArray).get_Array();
-        for (var x = 0; x < this.rowSize; x++) {
-            this.bits[offset + x] ^= row[x];
-        }
-    }
+  }
 };
 ZXing.Common.BitMatrix.prototype.clear = function () {
-    var max = this.bits.length;
-    for (var i = 0; i < max; i++) {
-        this.bits[i] = 0;
-    }
+  var max = this.bits.length;
+  for(var i = 0; i < max; i++) {
+    this.bits[i] = 0;
+  }
 };
 ZXing.Common.BitMatrix.prototype.setRegion = function (left, top, width, height) {
-    if (top < 0 || left < 0) {
-        throw new Error("Left and top must be nonnegative");
+  if (top < 0 || left < 0) {
+    throw new Error("Left and top must be non negative");
+  }
+  if (height < 1 || width < 1) {
+    throw new Error("Height and width must be at least 1");
+  }
+  var right = left + width;
+  var bottom = top + height;
+  if (bottom > this.height || right > this.width) {
+    throw new Error("The region must fit inside the matrix");
+  }
+  for(var y = top; y < bottom; y++) {
+    var offset = y * this.rowSize;
+    for(var x = left; x < right; x++) {
+      this.bits[offset + (x >> 5)] |= 1 << (x & 31);
     }
-    if (height < 1 || width < 1) {
-        throw new Error("Height and width must be at least 1");
-    }
-    var right = left + width;
-    var bottom = top + height;
-    if (bottom > this.height || right > this.width) {
-        throw new Error("The region must fit inside the matrix");
-    }
-    for (var y = top; y < bottom; y++) {
-        var offset = y * this.rowSize;
-        for (var x = left; x < right; x++) {
-            this.bits[offset + (x >> 5)] |= 1 << (x & 31);
-        }
-    }
+  }
 };
 ZXing.Common.BitMatrix.prototype.getRow = function (y, row) {
-    if (row == null || row.get_Size() < this.width) {
-        row = new ZXing.Common.BitArray(this.width);
-    }
-    else {
-        row.clear();
-    }
-    var offset = y * this.rowSize;
-    for (var x = 0; x < this.rowSize; x++) {
-        row.setBulk(x << 5, this.bits[offset + x]);
-    }
-    return row;
+  if (row == null || row.get_Size() < this.width) {
+    row = new ZXing.Common.BitArray(this.width);
+  }
+  else {
+    row.clear();
+  }
+  var offset = y * this.rowSize;
+  for(var x = 0; x < this.rowSize; x++) {
+    row.setBulk(x << 5, this.bits[offset + x]);
+  }
+  return row;
 };
 ZXing.Common.BitMatrix.prototype.setRow = function (y, row) {
-    row.get_Array().blockCopy(this.bits, y * this.rowSize, this.rowSize);
+  row.get_Array().blockCopy(this.bits, y * this.rowSize, this.rowSize);
 };
 ZXing.Common.BitMatrix.prototype.rotate180 = function () {
-    var width = this.get_Width();
-    var height = this.get_Height();
-    var topRow = new ZXing.Common.BitArray(width);
-    var bottomRow = new ZXing.Common.BitArray(width);
-    for (var i = 0; i < (height + 1) / 2; i++) {
-        topRow = this.getRow(i, topRow);
-        bottomRow = this.getRow(height - 1 - i, bottomRow);
-        topRow.reverse();
-        bottomRow.reverse();
-        this.setRow(i, bottomRow);
-        this.setRow(height - 1 - i, topRow);
-    }
+  var width = this.get_Width();
+  var height = this.get_Height();
+  var topRow = new ZXing.Common.BitArray(width);
+  var bottomRow = new ZXing.Common.BitArray(width);
+  for(var i = 0; i < (height + 1) / 2; i++) {
+    topRow = this.getRow(i, topRow);
+    bottomRow = this.getRow(height - 1 - i, bottomRow);
+    topRow.reverse();
+    bottomRow.reverse();
+    this.setRow(i, bottomRow);
+    this.setRow(height - 1 - i, topRow);
+  }
 };
 ZXing.Common.BitMatrix.prototype.getEnclosingRectangle = function () {
-    var left = this.width;
-    var top = this.height;
-    var right = -1;
-    var bottom = -1;
-    for (var y = 0; y < this.height; y++) {
-        for (var x32 = 0; x32 < this.rowSize; x32++) {
-            var theBits = this.bits[y * this.rowSize + x32];
-            if (theBits != 0) {
-                if (y < top) {
-                    top = y;
-                }
-                if (y > bottom) {
-                    bottom = y;
-                }
-                if (x32 * 32 < left) {
-                    var bit = 0;
-                    while ((theBits << (31 - bit)) == 0) {
-                        bit++;
-                    }
-                    if ((x32 * 32 + bit) < left) {
-                        left = x32 * 32 + bit;
-                    }
-                }
-                if (x32 * 32 + 31 > right) {
-                    var bit = 31;
-                    while ((theBits >> bit) == 0) {
-                        bit--;
-                    }
-                    if ((x32 * 32 + bit) > right) {
-                        right = x32 * 32 + bit;
-                    }
-                }
-            }
+  var left = this.width;
+  var top = this.height;
+  var right = -1;
+  var bottom = -1;
+  for(var y = 0; y < this.height; y++) {
+    for(var x32 = 0; x32 < this.rowSize; x32++) {
+      var theBits = this.bits[y * this.rowSize + x32];
+      if (theBits != 0) {
+        if (y < top) {
+          top = y;
         }
+        if (y > bottom) {
+          bottom = y;
+        }
+        if (x32 * 32 < left) {
+          var bit = 0;
+          while ((theBits << (31 - bit)) == 0) {
+            bit++;
+          }
+          if ((x32 * 32 + bit) < left) {
+            left = x32 * 32 + bit;
+          }
+        }
+
+        if (x32 * 32 + 31 > right) {
+          var bit1 = 31;
+          while ((theBits >> bit) == 0) {
+            bit1--;
+          }
+          if ((x32 * 32 + bit1) > right) {
+            right = x32 * 32 + bit1;
+          }
+        }
+      }
     }
-    var widthTmp = right - left;
-    var heightTmp = bottom - top;
-    if (widthTmp < 0 || heightTmp < 0) {
-        return null;
-    }
-    return new Int32Array([left, top, widthTmp, heightTmp]);
+  }
+  var widthTmp = right - left;
+  var heightTmp = bottom - top;
+  if (widthTmp < 0 || heightTmp < 0) {
+    return null;
+  }
+  return new Int32Array([left, top, widthTmp, heightTmp]);
 };
 ZXing.Common.BitMatrix.prototype.getTopLeftOnBit = function () {
-    var bitsOffset = 0;
-    while (bitsOffset < this.bits.length && this.bits[bitsOffset] == 0) {
-        bitsOffset++;
-    }
-    if (bitsOffset == this.bits.length) {
-        return null;
-    }
-    var y = Math.floor(bitsOffset / this.rowSize);
-    var x = (bitsOffset % this.rowSize) << 5;
-    var theBits = this.bits[bitsOffset];
-    var bit = 0;
-    while ((theBits << (31 - bit)) == 0) {
-        bit++;
-    }
-    x += bit;
-    return new Int32Array([x, y]);
+  var bitsOffset = 0;
+  while (bitsOffset < this.bits.length && this.bits[bitsOffset] == 0) {
+    bitsOffset++;
+  }
+  if (bitsOffset == this.bits.length) {
+    return null;
+  }
+  var y = Math.floor(bitsOffset / this.rowSize);
+  var x = (bitsOffset % this.rowSize) << 5;
+  var theBits = this.bits[bitsOffset];
+  var bit = 0;
+  while ((theBits << (31 - bit)) == 0) {
+    bit++;
+  }
+  x += bit;
+  return new Int32Array([x, y]);
 };
 ZXing.Common.BitMatrix.prototype.getBottomRightOnBit = function () {
-    var bitsOffset = this.bits.length - 1;
-    while (bitsOffset >= 0 && this.bits[bitsOffset] == 0) {
-        bitsOffset--;
-    }
-    if (bitsOffset < 0) {
-        return null;
-    }
-    var y = Math.floor(bitsOffset / this.rowSize);
-    var x = (bitsOffset % this.rowSize) << 5;
-    var theBits = this.bits[bitsOffset];
-    var bit = 31;
-    while ((theBits >> bit) == 0) {
-        bit--;
-    }
-    x += bit;
-    return new Int32Array([x, y]);
+  var bitsOffset = this.bits.length - 1;
+  while (bitsOffset >= 0 && this.bits[bitsOffset] == 0) {
+    bitsOffset--;
+  }
+  if (bitsOffset < 0) {
+    return null;
+  }
+  var y = Math.floor(bitsOffset / this.rowSize);
+  var x = (bitsOffset % this.rowSize) << 5;
+  var theBits = this.bits[bitsOffset];
+  var bit = 31;
+  while ((theBits >> bit) == 0) {
+    bit--;
+  }
+  x += bit;
+  return new Int32Array([x, y]);
 };
 ZXing.Common.BitMatrix.prototype.Equals = function (obj) {
-    if (!(obj instanceof ZXing.Common.BitMatrix)) {
-        return false;
+  if (!(obj instanceof ZXing.Common.BitMatrix)) {
+    return false;
+  }
+  var other = obj instanceof ZXing.Common.BitMatrix || obj == null ? obj : (function () {
+    throw new Error("InvalidCastException");
+  }());
+  if (this.width != other.width || this.height != other.height || this.rowSize != other.rowSize || this.bits.length != other.bits.length) {
+    return false;
+  }
+  for(var i = 0; i < this.bits.length; i++) {
+    if (this.bits[i] != other.bits[i]) {
+      return false;
     }
-    var other = obj instanceof ZXing.Common.BitMatrix || obj == null ? obj : (function () {
-        throw new Error("InvalidCastException");
-    }
-    ());
-    if (this.width != other.width || this.height != other.height || this.rowSize != other.rowSize || this.bits.length != other.bits.length) {
-        return false;
-    }
-    for (var i = 0; i < this.bits.length; i++) {
-        if (this.bits[i] != other.bits[i]) {
-            return false;
-        }
-    }
-    return true;
+  }
+  return true;
 };
 
 ZXing.Common.BitMatrix.prototype.toString = function (setString, unsetString, lineSeparator) {
-    var result = "";
+  var result = "";
 
-    // default parameters values
-    setString = setString || "X";
-    unsetString = unsetString || "  ";
-    lineSeparator = lineSeparator || '\n';
+  // default parameters values
+  setString = setString || "X";
+  unsetString = unsetString || "  ";
+  lineSeparator = lineSeparator || '\n';
 
-    for (var y = 0; y < this.height; y++) {
-        for (var x = 0; x < this.width; x++) {
-            result += (this.get_Item(x, y) ? setString : unsetString);
-        }
-        result += lineSeparator;
+  for(var y = 0; y < this.height; y++) {
+    for(var x = 0; x < this.width; x++) {
+      result += (this.get_Item(x, y) ? setString : unsetString);
     }
-    return result;
+    result += lineSeparator;
+  }
+  return result;
 };
 ZXing.Common.BitMatrix.prototype.Clone = function () {
-    return new ZXing.Common.BitMatrix(this.width, this.height, this.rowSize, this.bits.slice(0));
+  return new ZXing.Common.BitMatrix(this.width, this.height, this.rowSize, this.bits.slice(0));
 };
 
 //
@@ -1724,16 +1725,16 @@ ZXing.Common.CharacterSetECI.addCharacterSet = function (value, encodingNames) {
         }
     } else {
         var encodingName = encodingNames;
-        var eci = new ZXing.Common.CharacterSetECI(value, encodingName);
-        ZXing.Common.CharacterSetECI.VALUE_TO_ECI[value] = eci;
-        ZXing.Common.CharacterSetECI.NAME_TO_ECI[encodingName.toUpperCase()] = eci;
+        var eci2 = new ZXing.Common.CharacterSetECI(value, encodingName);
+        ZXing.Common.CharacterSetECI.VALUE_TO_ECI[value] = eci2;
+        ZXing.Common.CharacterSetECI.NAME_TO_ECI[encodingName.toUpperCase()] = eci2;
     }
 };
 
 ZXing.Common.CharacterSetECI.VALUE_TO_ECI = null;
 ZXing.Common.CharacterSetECI.NAME_TO_ECI = null;
-ZXing.Common.CharacterSetECI.VALUE_TO_ECI = new Object();
-ZXing.Common.CharacterSetECI.NAME_TO_ECI = new Object();
+ZXing.Common.CharacterSetECI.VALUE_TO_ECI = {};
+ZXing.Common.CharacterSetECI.NAME_TO_ECI = {};
 ZXing.Common.CharacterSetECI.addCharacterSet(0, "CP437");
 ZXing.Common.CharacterSetECI.addCharacterSet(1, ["ISO-8859-1", "ISO8859_1"]);
 ZXing.Common.CharacterSetECI.addCharacterSet(2, "CP437");
@@ -1800,146 +1801,148 @@ $Inherit(ZXing.Common.CharacterSetECI, ZXing.Common.ECI);
 ///
 
 ZXing.Common.GlobalHistogramBinarizer = function (source) {
-    this.luminances = null;
-    this.buckets = null;
-    ZXing.Binarizer.call(this, source);
-    this.luminances = ZXing.Common.GlobalHistogramBinarizer.EMPTY;
-    this.buckets = new Int32Array(32);
+  this.luminances = null;
+  this.buckets = null;
+  ZXing.Binarizer.call(this, source);
+  this.luminances = ZXing.Common.GlobalHistogramBinarizer.EMPTY;
+  this.buckets = new Int32Array(32);
 };
 ZXing.Common.GlobalHistogramBinarizer.LUMINANCE_BITS = 5;
 ZXing.Common.GlobalHistogramBinarizer.LUMINANCE_SHIFT = 3;
 ZXing.Common.GlobalHistogramBinarizer.LUMINANCE_BUCKETS = 32;
 ZXing.Common.GlobalHistogramBinarizer.EMPTY = new Uint8Array(0);
 ZXing.Common.GlobalHistogramBinarizer.prototype.getBlackRow = function (y, row) {
-    var source = this.get_LuminanceSource();
-    var width = source.get_Width();
-    if (row == null || row.get_Size() < width) {
-        row = new ZXing.Common.BitArray(width);
-    }
-    else {
-        row.clear();
-    }
-    this.initArrays(width);
-    var localLuminances = source.getRow(y, this.luminances);
-    var localBuckets = this.buckets;
-    for (var x = 0; x < width; x++) {
-        var pixel = localLuminances[x] & 255;
-        localBuckets[pixel >> 3]++;
-    }
-    var blackPoint;
-    if (!(function () {
-        var $1 = {
+  var source = this.get_LuminanceSource();
+  var width = source.get_Width();
+  if (row == null || row.get_Size() < width) {
+    row = new ZXing.Common.BitArray(width);
+  }
+  else {
+    row.clear();
+  }
+  this.initArrays(width);
+  var localLuminances = source.getRow(y, this.luminances);
+  var localBuckets = this.buckets;
+  for(var x = 0; x < width; x++) {
+    var pixel = localLuminances[x] & 255;
+    localBuckets[pixel >> 3]++;
+  }
+  var blackPoint = 0;
+  if (!(function () {
+      var $1 = {
         Value: blackPoint
-    };
-        var $res = ZXing.Common.GlobalHistogramBinarizer.estimateBlackPoint(localBuckets, $1);
-        blackPoint = $1.Value;
-        return $res;
+      };
+      var $res = ZXing.Common.GlobalHistogramBinarizer.estimateBlackPoint(localBuckets, $1);
+      blackPoint = $1.Value;
+      return $res;
     }).call(this))
-        return null;
-    var left = localLuminances[0] & 255;
-    var center = localLuminances[1] & 255;
-    for (var x = 1; x < width - 1; x++) {
-        var right = localLuminances[x + 1] & 255;
-        var luminance = ((center << 2) - left - right) >> 1;
-        row.set_Item(x, (luminance < blackPoint));
-        left = center;
-        center = right;
-    }
-    return row;
+    return null;
+  var left = localLuminances[0] & 255;
+  var center = localLuminances[1] & 255;
+  for(var x1 = 1; x1 < width - 1; x1++) {
+    var right = localLuminances[x1 + 1] & 255;
+    var luminance = ((center << 2) - left - right) >> 1;
+    row.set_Item(x1, (luminance < blackPoint));
+    left = center;
+    center = right;
+  }
+  return row;
 };
 ZXing.Common.GlobalHistogramBinarizer.prototype.get_BlackMatrix = function () {
-    var source = this.get_LuminanceSource();
-    var localLuminances;
-    var width = source.get_Width();
-    var height = source.get_Height();
-    var matrix = new ZXing.Common.BitMatrix(width, height);
-    this.initArrays(width);
-    var localBuckets = this.buckets;
-    for (var y = 1; y < 5; y++) {
-        var row = height * Math.floor(y / 5);
-        localLuminances = source.getRow(row, this.luminances);
-        var right = Math.floor((width << 2) / 5);
-        for (var x = width / 5; x < right; x++) {
-            var pixel = localLuminances[x] & 255;
-            localBuckets[pixel >> 3]++;
-        }
+  var source = this.get_LuminanceSource();
+  var localLuminances;
+  var width = source.get_Width();
+  var height = source.get_Height();
+  var matrix = new ZXing.Common.BitMatrix(width, height);
+  this.initArrays(width);
+  var localBuckets = this.buckets;
+  var pixel;
+  for(var y = 1; y < 5; y++) {
+    var row = height * Math.floor(y / 5);
+    localLuminances = source.getRow(row, this.luminances);
+    var right = Math.floor((width << 2) / 5);
+    for(var x = width / 5; x < right; x++) {
+      pixel = localLuminances[x] & 255;
+      localBuckets[pixel >> 3]++;
     }
-    var blackPoint;
-    if (!(function () {
-        var $1 = {
+  }
+  var blackPoint= 0;
+  if (!(function () {
+      var $1 = {
         Value: blackPoint
-    };
-        var $res = ZXing.Common.GlobalHistogramBinarizer.estimateBlackPoint(localBuckets, $1);
-        blackPoint = $1.Value;
-        return $res;
+      };
+      var $res = ZXing.Common.GlobalHistogramBinarizer.estimateBlackPoint(localBuckets, $1);
+      blackPoint = $1.Value;
+      return $res;
     }).call(this))
-        return null;
-    localLuminances = source.get_Matrix();
-    for (var y = 0; y < height; y++) {
-        var offset = y * width;
-        for (var x = 0; x < width; x++) {
-            var pixel = localLuminances[offset + x] & 255;
-            matrix.set_Item(x, y, (pixel < blackPoint));
-        }
+    return null;
+  localLuminances = source.get_Matrix();
+  for(var y1 = 0; y1 < height; y1++) {
+    var offset = y1 * width;
+    for(var x1 = 0; x1 < width; x1++) {
+      pixel = localLuminances[offset + x1] & 255;
+      matrix.set_Item(x1, y1, (pixel < blackPoint));
     }
-    return matrix;
+  }
+  return matrix;
 };
 ZXing.Common.GlobalHistogramBinarizer.prototype.createBinarizer = function (source) {
-    return new ZXing.Common.GlobalHistogramBinarizer(source);
+  return new ZXing.Common.GlobalHistogramBinarizer(source);
 };
 ZXing.Common.GlobalHistogramBinarizer.prototype.initArrays = function (luminanceSize) {
-    if (this.luminances.length < luminanceSize) {
-        this.luminances = new Uint8Array(luminanceSize);
-    }
-    for (var x = 0; x < 32; x++) {
-        this.buckets[x] = 0;
-    }
+  if (this.luminances.length < luminanceSize) {
+    this.luminances = new Uint8Array(luminanceSize);
+  }
+  for(var x = 0; x < 32; x++) {
+    this.buckets[x] = 0;
+  }
 };
 ZXing.Common.GlobalHistogramBinarizer.estimateBlackPoint = function (buckets, blackPoint) {
-    blackPoint.Value = 0;
-    var numBuckets = buckets.length;
-    var maxBucketCount = 0;
-    var firstPeak = 0;
-    var firstPeakSize = 0;
-    for (var x = 0; x < numBuckets; x++) {
-        if (buckets[x] > firstPeakSize) {
-            firstPeak = x;
-            firstPeakSize = buckets[x];
-        }
-        if (buckets[x] > maxBucketCount) {
-            maxBucketCount = buckets[x];
-        }
+  blackPoint.Value = 0;
+  var numBuckets = buckets.length;
+  var maxBucketCount = 0;
+  var firstPeak = 0;
+  var firstPeakSize = 0;
+  for(var x = 0; x < numBuckets; x++) {
+    if (buckets[x] > firstPeakSize) {
+      firstPeak = x;
+      firstPeakSize = buckets[x];
     }
-    var secondPeak = 0;
-    var secondPeakScore = 0;
-    for (var x = 0; x < numBuckets; x++) {
-        var distanceToBiggest = x - firstPeak;
-        var score = buckets[x] * distanceToBiggest * distanceToBiggest;
-        if (score > secondPeakScore) {
-            secondPeak = x;
-            secondPeakScore = score;
-        }
+    if (buckets[x] > maxBucketCount) {
+      maxBucketCount = buckets[x];
     }
-    if (firstPeak > secondPeak) {
-        var temp = firstPeak;
-        firstPeak = secondPeak;
-        secondPeak = temp;
+  }
+  var secondPeak = 0;
+  var secondPeakScore = 0;
+  var score;
+  for(var x1 = 0; x1 < numBuckets; x1++) {
+    var distanceToBiggest = x1 - firstPeak;
+    score = buckets[x1] * distanceToBiggest * distanceToBiggest;
+    if (score > secondPeakScore) {
+      secondPeak = x1;
+      secondPeakScore = score;
     }
-    if (secondPeak - firstPeak <= numBuckets >> 4) {
-        return false;
+  }
+  if (firstPeak > secondPeak) {
+    var temp = firstPeak;
+    firstPeak = secondPeak;
+    secondPeak = temp;
+  }
+  if (secondPeak - firstPeak <= numBuckets >> 4) {
+    return false;
+  }
+  var bestValley = secondPeak - 1;
+  var bestValleyScore = -1;
+  for(x = secondPeak - 1; x > firstPeak; x--) {
+    var fromFirst = x - firstPeak;
+    score = fromFirst * fromFirst * (secondPeak - x) * (maxBucketCount - buckets[x]);
+    if (score > bestValleyScore) {
+      bestValley = x;
+      bestValleyScore = score;
     }
-    var bestValley = secondPeak - 1;
-    var bestValleyScore = -1;
-    for (var x = secondPeak - 1; x > firstPeak; x--) {
-        var fromFirst = x - firstPeak;
-        var score = fromFirst * fromFirst * (secondPeak - x) * (maxBucketCount - buckets[x]);
-        if (score > bestValleyScore) {
-            bestValley = x;
-            bestValleyScore = score;
-        }
-    }
-    blackPoint.Value = bestValley << 3;
-    return true;
+  }
+  blackPoint.Value = bestValley << 3;
+  return true;
 };
 $Inherit(ZXing.Common.GlobalHistogramBinarizer, ZXing.Binarizer);
 
@@ -2009,30 +2012,32 @@ ZXing.Common.HybridBinarizer.prototype.binarizeEntireImage = function () {
     }
 };
 ZXing.Common.HybridBinarizer.calculateThresholdForBlock = function (luminances, subWidth, subHeight, width, height, blackPoints, matrix) {
+    var maxYOffset = height - 8;
+    var maxXOffset = width - 8;
+    var top, yoffset, xoffset, left, sum, blackRow, average;
+
     for (var y = 0; y < subHeight; y++) {
-        var yoffset = y << 3;
-        var maxYOffset = height - 8;
+        yoffset = y << 3;
         if (yoffset > maxYOffset) {
             yoffset = maxYOffset;
         }
+        top = ZXing.Common.HybridBinarizer.cap(y, 2, subHeight - 3);
         for (var x = 0; x < subWidth; x++) {
-            var xoffset = x << 3;
-            var maxXOffset = width - 8;
+            xoffset = x << 3;
             if (xoffset > maxXOffset) {
                 xoffset = maxXOffset;
             }
-            var left = ZXing.Common.HybridBinarizer.cap(x, 2, subWidth - 3);
-            var top = ZXing.Common.HybridBinarizer.cap(y, 2, subHeight - 3);
-            var sum = 0;
+            left = ZXing.Common.HybridBinarizer.cap(x, 2, subWidth - 3);
+            sum = 0;
             for (var z = -2; z <= 2; z++) {
-                var blackRow = blackPoints[top + z];
+                blackRow = blackPoints[top + z];
                 sum += blackRow[left - 2];
                 sum += blackRow[left - 1];
                 sum += blackRow[left];
                 sum += blackRow[left + 1];
                 sum += blackRow[left + 2];
             }
-            var average = Math.floor(sum / 25);
+            average = Math.floor(sum / 25);
             ZXing.Common.HybridBinarizer.thresholdBlock(luminances, xoffset, yoffset, average, width, matrix);
         }
     }
@@ -2042,27 +2047,29 @@ ZXing.Common.HybridBinarizer.cap = function (value, min, max) {
 };
 ZXing.Common.HybridBinarizer.thresholdBlock = function (luminances, xoffset, yoffset, threshold, stride, matrix) {
     var offset = (yoffset * stride) + xoffset;
+    var pixel;
+
     for (var y = 0; y < 8; y++, offset += stride) {
         for (var x = 0; x < 8; x++) {
-            var pixel = luminances[offset + x] & 255;
+            pixel = luminances[offset + x] & 255;
             matrix.set_Item(xoffset + x, yoffset + y, (pixel <= threshold));
         }
     }
 };
 ZXing.Common.HybridBinarizer.calculateBlackPoints = function (luminances, subWidth, subHeight, width, height) {
     var blackPoints = new Array(subHeight);
+    var maxYOffset = height - 8;
+    var maxXOffset = width - 8;
     for (var i = 0; i < subHeight; i++) {
         blackPoints[i] = new Int32Array(subWidth);
     }
     for (var y = 0; y < subHeight; y++) {
         var yoffset = y << 3;
-        var maxYOffset = height - 8;
         if (yoffset > maxYOffset) {
             yoffset = maxYOffset;
         }
         for (var x = 0; x < subWidth; x++) {
             var xoffset = x << 3;
-            var maxXOffset = width - 8;
             if (xoffset > maxXOffset) {
                 xoffset = maxXOffset;
             }
@@ -2082,7 +2089,7 @@ ZXing.Common.HybridBinarizer.calculateBlackPoints = function (luminances, subWid
                 }
                 if (max - min > 24) {
                     for (yy++, offset += width; yy < 8; yy++, offset += width) {
-                        for (var xx = 0; xx < 8; xx++) {
+                        for (xx = 0; xx < 8; xx++) {
                             sum += luminances[offset + xx] & 255;
                         }
                     }
@@ -2182,7 +2189,7 @@ ZXing.PDF417.PDF417Common.getBitCountSum = function (moduleBitCount) {
     return bitCountSum;
 };
 ZXing.PDF417.PDF417Common.toIntArray = function (list) {
-    if (list == null) {
+    if (!list) {
         return ZXing.PDF417.PDF417Common.EMPTY_INT_ARRAY;
     }
     return list;
@@ -2363,9 +2370,9 @@ ZXing.PDF417.Internal.Detector.findRowsWithPattern = function (matrix, height, w
     var stopRow = startRow + 1;
     if (found) {
         var skippedRowCount = 0;
-        var previousRowLoc = new Int32Array([result[0].x, result[1].x]);
+        previousRowLoc = new Int32Array([result[0].x, result[1].x]);
         for (; stopRow < height; stopRow++) {
-            var loc = ZXing.PDF417.Internal.Detector.findGuardPattern(matrix, previousRowLoc[0], stopRow, width, false, pattern, counters);
+            loc = ZXing.PDF417.Internal.Detector.findGuardPattern(matrix, previousRowLoc[0], stopRow, width, false, pattern, counters);
             if (loc != null && Math.abs(previousRowLoc[0] - loc[0]) < 5 && Math.abs(previousRowLoc[1] - loc[1]) < 5) {
                 previousRowLoc = loc;
                 skippedRowCount = 0;
@@ -2413,7 +2420,7 @@ ZXing.PDF417.Internal.Detector.findGuardPattern = function (matrix, column, row,
                 }
                 patternStart += counters[0] + counters[1];
                 //                System.Array.Copy(counters, 2, counters, 0, patternLength - 2);
-                counters.blockCopy(counters, 2, 0, patternLength - 2)
+                counters.blockCopy(counters, 2, 0, patternLength - 2);
                 counters[patternLength - 2] = 0;
                 counters[patternLength - 1] = 0;
                 counterPosition--;
@@ -2718,7 +2725,7 @@ ZXing.PDF417.Internal.EC.ModulusGF = function (modulus, generator) {
         this.expTable[i] = x;
         x = (x * generator) % modulus;
     }
-    for (var i = 0; i < modulus - 1; i++) {
+    for (i = 0; i < modulus - 1; i++) {
         this.logTable[this.expTable[i]] = i;
     }
     this.Zero = new ZXing.PDF417.Internal.EC.ModulusPoly(this, new Int32Array([0]));
@@ -2833,7 +2840,7 @@ ZXing.PDF417.Internal.EC.ErrorCorrection.prototype.decode = function (received, 
         return false;
     }
     var errorMagnitudes = this.findErrorMagnitudes(omega, sigma, errorLocations);
-    for (var i = 0; i < errorLocations.length; i++) {
+    for (i = 0; i < errorLocations.length; i++) {
         var position = received.length - 1 - this.field.log(errorLocations[i]);
         if (position < 0) {
             return false;
@@ -2906,7 +2913,7 @@ ZXing.PDF417.Internal.EC.ErrorCorrection.prototype.findErrorMagnitudes = functio
     var formalDerivative = new ZXing.PDF417.Internal.EC.ModulusPoly(this.field, formalDerivativeCoefficients);
     var s = errorLocations.length;
     var result = new Int32Array(s);
-    for (var i = 0; i < s; i++) {
+    for (i = 0; i < s; i++) {
         var xiInverse = this.field.inverse(errorLocations[i]);
         var numerator = this.field.subtract(0, errorEvaluator.evaluateAt(xiInverse));
         var denominator = this.field.inverse(formalDerivative.evaluateAt(xiInverse));
@@ -3052,7 +3059,7 @@ ZXing.PDF417.Internal.BoundingBox = function (image, topLeft, bottomLeft, topRig
 };
 ZXing.PDF417.Internal.BoundingBox.Create = function (image, topLeft, bottomLeft, topRight, bottomRight) {
     if (arguments.length > 1) {
-        if ((topLeft == null && topRight == null) || (bottomLeft == null && bottomRight == null) || (topLeft != null && bottomLeft == null) || (topRight != null && bottomRight == null)) {
+        if ((!topLeft && !topRight) || (!bottomLeft && !bottomRight) || (topLeft && !bottomLeft) || (topRight && !bottomRight)) {
             return null;
         }
         return new ZXing.PDF417.Internal.BoundingBox(image, topLeft, bottomLeft, topRight, bottomRight);
@@ -3064,9 +3071,9 @@ ZXing.PDF417.Internal.BoundingBox.CreateBoxed = function (box) {
     return new ZXing.PDF417.Internal.BoundingBox(box.image, box.TopLeft, box.BottomLeft, box.TopRight, box.BottomRight);
 };
 ZXing.PDF417.Internal.BoundingBox.merge = function (leftBox, rightBox) {
-    if (leftBox == null)
+    if (!leftBox)
         return rightBox;
-    if (rightBox == null)
+    if (!rightBox)
         return leftBox;
     return new ZXing.PDF417.Internal.BoundingBox(leftBox.image, leftBox.TopLeft, leftBox.BottomLeft, rightBox.TopRight, rightBox.BottomRight);
 };
@@ -3107,11 +3114,10 @@ ZXing.PDF417.Internal.BoundingBox.prototype.addMissingRows = function (missingSt
     return new ZXing.PDF417.Internal.BoundingBox(this.image, newTopLeft, newBottomLeft, newTopRight, newBottomRight);
 };
 ZXing.PDF417.Internal.BoundingBox.prototype.calculateMinMaxValues = function () {
-    if (this.TopLeft == null) {
+    if (!this.TopLeft) {
         this.TopLeft = new ZXing.ResultPoint(0, this.TopRight.y);
         this.BottomLeft = new ZXing.ResultPoint(0, this.BottomRight.y);
-    }
-    else if (this.TopRight == null) {
+    } else if (!this.TopRight) {
         this.TopRight = new ZXing.ResultPoint(this.image.width - 1, this.TopLeft.y);
         this.BottomRight = new ZXing.ResultPoint(this.image.width - 1, this.TopLeft.y);
     }
@@ -3240,16 +3246,17 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decode = function (codewords, ecLev
     var codeIndex = 1;
     var code = codewords[codeIndex++];
     var resultMetadata = new ZXing.PDF417.PDF417ResultMetadata();
+    var p1 = null;
     while (codeIndex < codewords[0]) {
         switch (code) {
             case 900:
-                var p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
+                p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
                 codeIndex = ZXing.PDF417.Internal.DecodedBitStreamParser.textCompaction(p1);
                 result = p1.result;
                 break;
             case 901:
             case 924:
-                var p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
+                p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
                 codeIndex = ZXing.PDF417.Internal.DecodedBitStreamParser.byteCompaction(p1);
                 result = p1.result;
                 break;
@@ -3257,7 +3264,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decode = function (codewords, ecLev
                 result += (codewords[codeIndex++]);
                 break;
             case 902:
-                var p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
+                p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
                 codeIndex = ZXing.PDF417.Internal.DecodedBitStreamParser.numericCompaction(p1);
                 result = p1.result;
                 break;
@@ -3278,7 +3285,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decode = function (codewords, ecLev
                 return null;
             default:
                 codeIndex--;
-                var p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
+                p1 = { mode: code, codewords: codewords, codeIndex: codeIndex, result: result };
                 codeIndex = ZXing.PDF417.Internal.DecodedBitStreamParser.textCompaction(p1);
                 result = p1.result;
                 break;
@@ -3292,7 +3299,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decode = function (codewords, ecLev
             return null;
         }
     }
-    if (result.length == 0) {
+    if (!result.length) {
         return null;
     }
     var decoderResult = new ZXing.Common.DecoderResult(null, result.toString(), null, ecLevel);
@@ -3309,7 +3316,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decodeMacroBlock = function (codewo
         segmentIndexArray[i] = codewords[codeIndex];
     }
     var s = ZXing.PDF417.Internal.DecodedBitStreamParser.decodeBase900toBase10(segmentIndexArray, 2);
-    if (s == null)
+    if (!s)
         return -1;
     resultMetadata.set_SegmentIndex(parseInt(s));
     var fileId = "";
@@ -3383,7 +3390,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.textCompaction = function (p) {
             }
         }
     }
-    var p1 = { textCompactionData: textCompactionData, byteCompactionData: byteCompactionData, length: index, result: result }
+    var p1 = { textCompactionData: textCompactionData, byteCompactionData: byteCompactionData, length: index, result: result };
     ZXing.PDF417.Internal.DecodedBitStreamParser.decodeTextCompaction(p1);
     p.result = p1.result;
     return codeIndex;
@@ -3536,11 +3543,14 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decodeTextCompaction = function (p)
 ZXing.PDF417.Internal.DecodedBitStreamParser.byteCompaction = function (p) {
     var mode = p.mode, codewords = p.codewords, codeIndex = p.codeIndex;
     var decodedBytes = [];
+    var count = 0;
+    var value = 0;
+    var end = false;
     if (mode == 901) {
-        var count = 0;
-        var value = 0;
+        count = 0;
+        value = 0;
         var byteCompactedCodewords = new Int32Array(6);
-        var end = false;
+        end = false;
         var nextCode = codewords[codeIndex++];
         while ((codeIndex < codewords[0]) && !end) {
             byteCompactedCodewords[count++] = nextCode;
@@ -3551,7 +3561,7 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.byteCompaction = function (p) {
                 end = true;
             }
             else {
-                if ((count % 5 == 0) && (count > 0)) {
+                if ((count % 5 === 0) && (count > 0)) {
                     for (var j = 0; j < 6; ++j) {
                         decodedBytes.push((value >> (8 * (5 - j))));
                     }
@@ -3565,11 +3575,10 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.byteCompaction = function (p) {
         for (var i = 0; i < count; i++) {
             decodedBytes.push(byteCompactedCodewords[i]);
         }
-    }
-    else if (mode == 924) {
-        var count = 0;
-        var value = 0;
-        var end = false;
+    } else if (mode == 924) {
+        count = 0;
+        value = 0;
+        end = false;
         while (codeIndex < codewords[0] && !end) {
             var code = codewords[codeIndex++];
             if (code < 900) {
@@ -3583,16 +3592,15 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.byteCompaction = function (p) {
                 }
             }
             if ((count % 5 == 0) && (count > 0)) {
-                for (var j = 0; j < 6; ++j) {
-                    decodedBytes.push((value >> (8 * (5 - j))));
+                for (var j1 = 0; j1 < 6; ++j1) {
+                    decodedBytes.push((value >> (8 * (5 - j1))));
                 }
                 value = 0;
                 count = 0;
             }
         }
     }
-    var bytes = decodedBytes;
-    p.result += (String.fromCharCode.apply(null, bytes));
+    p.result += (String.fromCharCode.apply(null, decodedBytes));
     return codeIndex;
 };
 ZXing.PDF417.Internal.DecodedBitStreamParser.numericCompaction = function (p) {
@@ -3616,10 +3624,10 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.numericCompaction = function (p) {
                 end = true;
             }
         }
-        if (count % 15 == 0 || code == 902 || end) {
+        if (count % 15 === 0 || code === 902 || end) {
             if (count > 0) {
                 var s = ZXing.PDF417.Internal.DecodedBitStreamParser.decodeBase900toBase10(numericCodewords, count);
-                if (s == null)
+                if (!s)
                     return -1;
                 p.result += (s);
                 count = 0;
@@ -3665,220 +3673,218 @@ ZXing.PDF417.Internal.DecodedBitStreamParser.decodeBase900toBase10 = function (c
 ///
 
 ZXing.PDF417.Internal.DetectionResult = function (metadata, box) {
-    this.Metadata = null;
-    this.DetectionResultColumns = null;
-    this.Box = null;
-    this.ColumnCount = 0;
-    this.Metadata = metadata;
-    this.Box = box;
-    this.ColumnCount = metadata.ColumnCount;
-    this.DetectionResultColumns = new Array(this.ColumnCount + 2);
+  this.Metadata = null;
+  this.DetectionResultColumns = null;
+  this.Box = null;
+  this.ColumnCount = 0;
+  this.Metadata = metadata;
+  this.Box = box;
+  this.ColumnCount = metadata.ColumnCount;
+  this.DetectionResultColumns = new Array(this.ColumnCount + 2);
 };
 ZXing.PDF417.Internal.DetectionResult.ADJUST_ROW_NUMBER_SKIP = 2;
 ZXing.PDF417.Internal.DetectionResult.prototype.get_RowCount = function () {
-    return this.Metadata.RowCount;
+  return this.Metadata.RowCount;
 };
 ZXing.PDF417.Internal.DetectionResult.prototype.get_ErrorCorrectionLevel = function () {
-    return this.Metadata.ErrorCorrectionLevel;
+  return this.Metadata.ErrorCorrectionLevel;
 };
 ZXing.PDF417.Internal.DetectionResult.prototype.getDetectionResultColumns = function () {
-    this.adjustIndicatorColumnRowNumbers(this.DetectionResultColumns[0]);
-    this.adjustIndicatorColumnRowNumbers(this.DetectionResultColumns[this.ColumnCount + 1]);
-    var unadjustedCodewordCount = ZXing.PDF417.PDF417Common.MAX_CODEWORDS_IN_BARCODE;
-    var previousUnadjustedCount;
-    do {
-        previousUnadjustedCount = unadjustedCodewordCount;
-        unadjustedCodewordCount = this.adjustRowNumbers();
-    }
-    while (unadjustedCodewordCount > 0 && unadjustedCodewordCount < previousUnadjustedCount)
-    return this.DetectionResultColumns;
+  this.adjustIndicatorColumnRowNumbers(this.DetectionResultColumns[0]);
+  this.adjustIndicatorColumnRowNumbers(this.DetectionResultColumns[this.ColumnCount + 1]);
+  var unadjustedCodewordCount = ZXing.PDF417.PDF417Common.MAX_CODEWORDS_IN_BARCODE;
+  var previousUnadjustedCount;
+  do {
+    previousUnadjustedCount = unadjustedCodewordCount;
+    unadjustedCodewordCount = this.adjustRowNumbers();
+  } while (unadjustedCodewordCount > 0 && unadjustedCodewordCount < previousUnadjustedCount);
+  return this.DetectionResultColumns;
 };
 ZXing.PDF417.Internal.DetectionResult.prototype.adjustIndicatorColumnRowNumbers = function (detectionResultColumn) {
-    if (detectionResultColumn != null) {
-        (detectionResultColumn instanceof ZXing.PDF417.Internal.DetectionResultRowIndicatorColumn || detectionResultColumn == null ? detectionResultColumn : (function () {
-            throw new Error("InvalidCastException");
-        }
-        ())).adjustCompleteIndicatorColumnRowNumbers(this.Metadata);
-    }
+  if (detectionResultColumn) {
+    (detectionResultColumn instanceof ZXing.PDF417.Internal.DetectionResultRowIndicatorColumn || detectionResultColumn == null ? detectionResultColumn : (function () {
+      throw new Error("InvalidCastException");
+    }())).adjustCompleteIndicatorColumnRowNumbers(this.Metadata);
+  }
 };
 ZXing.PDF417.Internal.DetectionResult.prototype.adjustRowNumbersMy = function () {
-    var unadjustedCount = this.adjustRowNumbersByRow();
-    if (unadjustedCount == 0) {
-        return 0;
+  var unadjustedCount = this.adjustRowNumbersByRow();
+  if (unadjustedCount == 0) {
+    return 0;
+  }
+  for(var barcodeColumn = 1; barcodeColumn < this.ColumnCount + 1; barcodeColumn++) {
+    var codewords = this.DetectionResultColumns[barcodeColumn].Codewords;
+    for(var codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
+      if (codewords[codewordsRow] == null) {
+        continue;
+      }
+      if (!codewords[codewordsRow].get_HasValidRowNumber()) {
+        this.adjustRowNumbers(barcodeColumn, codewordsRow, codewords);
+      }
     }
-    for (var barcodeColumn = 1; barcodeColumn < this.ColumnCount + 1; barcodeColumn++) {
-        var codewords = this.DetectionResultColumns[barcodeColumn].Codewords;
-        for (var codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
-            if (codewords[codewordsRow] == null) {
-                continue;
-            }
-            if (!codewords[codewordsRow].get_HasValidRowNumber()) {
-                this.adjustRowNumbers(barcodeColumn, codewordsRow, codewords);
-            }
-        }
-    }
-    return unadjustedCount;
+  }
+  return unadjustedCount;
 };
 ZXing.PDF417.Internal.DetectionResult.prototype.adjustRowNumbers = function (barcodeColumn, codewordsRow, codewords) {
-    if (!arguments.length) return this.adjustRowNumbersMy();
-    var codeword = codewords[codewordsRow];
-    var previousColumnCodewords = this.DetectionResultColumns[barcodeColumn - 1].Codewords;
-    var nextColumnCodewords = previousColumnCodewords;
-    if (this.DetectionResultColumns[barcodeColumn + 1] != null) {
-        nextColumnCodewords = this.DetectionResultColumns[barcodeColumn + 1].Codewords;
+  if (!arguments.length) return this.adjustRowNumbersMy();
+  var codeword = codewords[codewordsRow];
+  var previousColumnCodewords = this.DetectionResultColumns[barcodeColumn - 1].Codewords;
+  var nextColumnCodewords = previousColumnCodewords;
+  if (this.DetectionResultColumns[barcodeColumn + 1] != null) {
+    nextColumnCodewords = this.DetectionResultColumns[barcodeColumn + 1].Codewords;
+  }
+  var otherCodewords = new Array(14);
+  otherCodewords[2] = previousColumnCodewords[codewordsRow];
+  otherCodewords[3] = nextColumnCodewords[codewordsRow];
+  if (codewordsRow > 0) {
+    otherCodewords[0] = codewords[codewordsRow - 1];
+    otherCodewords[4] = previousColumnCodewords[codewordsRow - 1];
+    otherCodewords[5] = nextColumnCodewords[codewordsRow - 1];
+  }
+  if (codewordsRow > 1) {
+    otherCodewords[8] = codewords[codewordsRow - 2];
+    otherCodewords[10] = previousColumnCodewords[codewordsRow - 2];
+    otherCodewords[11] = nextColumnCodewords[codewordsRow - 2];
+  }
+  if (codewordsRow < codewords.length - 1) {
+    otherCodewords[1] = codewords[codewordsRow + 1];
+    otherCodewords[6] = previousColumnCodewords[codewordsRow + 1];
+    otherCodewords[7] = nextColumnCodewords[codewordsRow + 1];
+  }
+  if (codewordsRow < codewords.length - 2) {
+    otherCodewords[9] = codewords[codewordsRow + 2];
+    otherCodewords[12] = previousColumnCodewords[codewordsRow + 2];
+    otherCodewords[13] = nextColumnCodewords[codewordsRow + 2];
+  }
+  for(var $i5 = 0, $l5 = otherCodewords.length, otherCodeword = otherCodewords[$i5]; $i5 < $l5; $i5++, otherCodeword = otherCodewords[$i5]) {
+    if (ZXing.PDF417.Internal.DetectionResult.adjustRowNumber(codeword, otherCodeword)) {
+      return;
     }
-    var otherCodewords = new Array(14);
-    otherCodewords[2] = previousColumnCodewords[codewordsRow];
-    otherCodewords[3] = nextColumnCodewords[codewordsRow];
-    if (codewordsRow > 0) {
-        otherCodewords[0] = codewords[codewordsRow - 1];
-        otherCodewords[4] = previousColumnCodewords[codewordsRow - 1];
-        otherCodewords[5] = nextColumnCodewords[codewordsRow - 1];
-    }
-    if (codewordsRow > 1) {
-        otherCodewords[8] = codewords[codewordsRow - 2];
-        otherCodewords[10] = previousColumnCodewords[codewordsRow - 2];
-        otherCodewords[11] = nextColumnCodewords[codewordsRow - 2];
-    }
-    if (codewordsRow < codewords.length - 1) {
-        otherCodewords[1] = codewords[codewordsRow + 1];
-        otherCodewords[6] = previousColumnCodewords[codewordsRow + 1];
-        otherCodewords[7] = nextColumnCodewords[codewordsRow + 1];
-    }
-    if (codewordsRow < codewords.length - 2) {
-        otherCodewords[9] = codewords[codewordsRow + 2];
-        otherCodewords[12] = previousColumnCodewords[codewordsRow + 2];
-        otherCodewords[13] = nextColumnCodewords[codewordsRow + 2];
-    }
-    for (var $i5 = 0, $l5 = otherCodewords.length, otherCodeword = otherCodewords[$i5]; $i5 < $l5; $i5++, otherCodeword = otherCodewords[$i5]) {
-        if (ZXing.PDF417.Internal.DetectionResult.adjustRowNumber(codeword, otherCodeword)) {
-            return;
-        }
-    }
+  }
 };
 
 ZXing.PDF417.Internal.DetectionResult.prototype.adjustRowNumbersByRow = function () {
-    this.adjustRowNumbersFromBothRI();
-    var unadjustedCount = this.adjustRowNumbersFromLRI();
-    return unadjustedCount + this.adjustRowNumbersFromRRI();
+  this.adjustRowNumbersFromBothRI();
+  var unadjustedCount = this.adjustRowNumbersFromLRI();
+  return unadjustedCount + this.adjustRowNumbersFromRRI();
 };
 ZXing.PDF417.Internal.DetectionResult.prototype.adjustRowNumbersFromBothRI = function () {
-    if (this.DetectionResultColumns[0] == null || this.DetectionResultColumns[this.ColumnCount + 1] == null) {
-        return;
-    }
-    var LRIcodewords = this.DetectionResultColumns[0].Codewords;
-    var RRIcodewords = this.DetectionResultColumns[this.ColumnCount + 1].Codewords;
-    for (var codewordsRow = 0; codewordsRow < LRIcodewords.length; codewordsRow++) {
-        if (LRIcodewords[codewordsRow] != null && RRIcodewords[codewordsRow] != null && LRIcodewords[codewordsRow].RowNumber == RRIcodewords[codewordsRow].RowNumber) {
-            for (var barcodeColumn = 1; barcodeColumn <= this.ColumnCount; barcodeColumn++) {
-                var codeword = this.DetectionResultColumns[barcodeColumn].Codewords[codewordsRow];
-                if (codeword == null) {
-                    continue;
-                }
-                codeword.RowNumber = LRIcodewords[codewordsRow].RowNumber;
-                if (!codeword.get_HasValidRowNumber()) {
-                    this.DetectionResultColumns[barcodeColumn].Codewords[codewordsRow] = null;
-                }
-            }
+  if (this.DetectionResultColumns[0] == null || this.DetectionResultColumns[this.ColumnCount + 1] == null) {
+    return;
+  }
+  var LRIcodewords = this.DetectionResultColumns[0].Codewords;
+  var RRIcodewords = this.DetectionResultColumns[this.ColumnCount + 1].Codewords;
+  for(var codewordsRow = 0; codewordsRow < LRIcodewords.length; codewordsRow++) {
+    if (LRIcodewords[codewordsRow] != null && RRIcodewords[codewordsRow] != null && LRIcodewords[codewordsRow].RowNumber == RRIcodewords[codewordsRow].RowNumber) {
+      for(var barcodeColumn = 1; barcodeColumn <= this.ColumnCount; barcodeColumn++) {
+        var codeword = this.DetectionResultColumns[barcodeColumn].Codewords[codewordsRow];
+        if (codeword == null) {
+          continue;
         }
+        codeword.RowNumber = LRIcodewords[codewordsRow].RowNumber;
+        if (!codeword.get_HasValidRowNumber()) {
+          this.DetectionResultColumns[barcodeColumn].Codewords[codewordsRow] = null;
+        }
+      }
     }
+  }
 };
 ZXing.PDF417.Internal.DetectionResult.prototype.adjustRowNumbersFromRRI = function () {
-    if (this.DetectionResultColumns[this.ColumnCount + 1] == null) {
-        return 0;
+  if (this.DetectionResultColumns[this.ColumnCount + 1] == null) {
+    return 0;
+  }
+  var unadjustedCount = 0;
+  var codewords = this.DetectionResultColumns[this.ColumnCount + 1].Codewords;
+  for(var codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
+    if (codewords[codewordsRow] == null) {
+      continue;
     }
-    var unadjustedCount = 0;
-    var codewords = this.DetectionResultColumns[this.ColumnCount + 1].Codewords;
-    for (var codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
-        if (codewords[codewordsRow] == null) {
-            continue;
+    var rowIndicatorRowNumber = codewords[codewordsRow].RowNumber;
+    var invalidRowCounts = 0;
+    for(var barcodeColumn = this.ColumnCount + 1; barcodeColumn > 0 && invalidRowCounts < 2; barcodeColumn--) {
+      var codeword = this.DetectionResultColumns[barcodeColumn].Codewords[codewordsRow];
+      if (codeword != null) {
+        invalidRowCounts = ZXing.PDF417.Internal.DetectionResult.adjustRowNumberIfValid(rowIndicatorRowNumber, invalidRowCounts, codeword);
+        if (!codeword.get_HasValidRowNumber()) {
+          unadjustedCount++;
         }
-        var rowIndicatorRowNumber = codewords[codewordsRow].RowNumber;
-        var invalidRowCounts = 0;
-        for (var barcodeColumn = this.ColumnCount + 1; barcodeColumn > 0 && invalidRowCounts < 2; barcodeColumn--) {
-            var codeword = this.DetectionResultColumns[barcodeColumn].Codewords[codewordsRow];
-            if (codeword != null) {
-                invalidRowCounts = ZXing.PDF417.Internal.DetectionResult.adjustRowNumberIfValid(rowIndicatorRowNumber, invalidRowCounts, codeword);
-                if (!codeword.get_HasValidRowNumber()) {
-                    unadjustedCount++;
-                }
-            }
-        }
+      }
     }
-    return unadjustedCount;
+  }
+  return unadjustedCount;
 };
 ZXing.PDF417.Internal.DetectionResult.prototype.adjustRowNumbersFromLRI = function () {
-    if (this.DetectionResultColumns[0] == null) {
-        return 0;
+  if (this.DetectionResultColumns[0] == null) {
+    return 0;
+  }
+  var unadjustedCount = 0;
+  var codewords = this.DetectionResultColumns[0].Codewords;
+  for(var codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
+    if (codewords[codewordsRow] == null) {
+      continue;
     }
-    var unadjustedCount = 0;
-    var codewords = this.DetectionResultColumns[0].Codewords;
-    for (var codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
-        if (codewords[codewordsRow] == null) {
-            continue;
+    var rowIndicatorRowNumber = codewords[codewordsRow].RowNumber;
+    var invalidRowCounts = 0;
+    for(var barcodeColumn = 1; barcodeColumn < this.ColumnCount + 1 && invalidRowCounts < 2; barcodeColumn++) {
+      var codeword = this.DetectionResultColumns[barcodeColumn].Codewords[codewordsRow];
+      if (codeword != null) {
+        invalidRowCounts = ZXing.PDF417.Internal.DetectionResult.adjustRowNumberIfValid(rowIndicatorRowNumber, invalidRowCounts, codeword);
+        if (!codeword.get_HasValidRowNumber()) {
+          unadjustedCount++;
         }
-        var rowIndicatorRowNumber = codewords[codewordsRow].RowNumber;
-        var invalidRowCounts = 0;
-        for (var barcodeColumn = 1; barcodeColumn < this.ColumnCount + 1 && invalidRowCounts < 2; barcodeColumn++) {
-            var codeword = this.DetectionResultColumns[barcodeColumn].Codewords[codewordsRow];
-            if (codeword != null) {
-                invalidRowCounts = ZXing.PDF417.Internal.DetectionResult.adjustRowNumberIfValid(rowIndicatorRowNumber, invalidRowCounts, codeword);
-                if (!codeword.get_HasValidRowNumber()) {
-                    unadjustedCount++;
-                }
-            }
-        }
+      }
     }
-    return unadjustedCount;
+  }
+  return unadjustedCount;
 };
 ZXing.PDF417.Internal.DetectionResult.adjustRowNumberIfValid = function (rowIndicatorRowNumber, invalidRowCounts, codeword) {
-    if (codeword == null) {
-        return invalidRowCounts;
-    }
-    if (!codeword.get_HasValidRowNumber()) {
-        if (codeword.IsValidRowNumber(rowIndicatorRowNumber)) {
-            codeword.RowNumber = rowIndicatorRowNumber;
-            invalidRowCounts = 0;
-        }
-        else {
-            ++invalidRowCounts;
-        }
-    }
+  if (codeword == null) {
     return invalidRowCounts;
+  }
+  if (!codeword.get_HasValidRowNumber()) {
+    if (codeword.IsValidRowNumber(rowIndicatorRowNumber)) {
+      codeword.RowNumber = rowIndicatorRowNumber;
+      invalidRowCounts = 0;
+    }
+    else {
+      ++invalidRowCounts;
+    }
+  }
+  return invalidRowCounts;
 };
 ZXing.PDF417.Internal.DetectionResult.adjustRowNumber = function (codeword, otherCodeword) {
-    if (otherCodeword == null) {
-        return false;
-    }
-    if (otherCodeword.get_HasValidRowNumber() && otherCodeword.Bucket == codeword.Bucket) {
-        codeword.RowNumber = otherCodeword.RowNumber;
-        return true;
-    }
+  if (otherCodeword == null) {
     return false;
+  }
+  if (otherCodeword.get_HasValidRowNumber() && otherCodeword.Bucket == codeword.Bucket) {
+    codeword.RowNumber = otherCodeword.RowNumber;
+    return true;
+  }
+  return false;
 };
 ZXing.PDF417.Internal.DetectionResult.prototype.toString = function () {
-    var formatter = "";
-    var rowIndicatorColumn = this.DetectionResultColumns[0];
-    if (rowIndicatorColumn == null) {
-        rowIndicatorColumn = this.DetectionResultColumns[this.ColumnCount + 1];
+  var formatter = "";
+  var rowIndicatorColumn = this.DetectionResultColumns[0];
+  if (rowIndicatorColumn == null) {
+    rowIndicatorColumn = this.DetectionResultColumns[this.ColumnCount + 1];
+  }
+  for(var codewordsRow = 0; codewordsRow < rowIndicatorColumn.Codewords.length; codewordsRow++) {
+    formatter += "CW {0}:".format(FormatInteger(codewordsRow, 3));
+    for(var barcodeColumn = 0; barcodeColumn < this.ColumnCount + 2; barcodeColumn++) {
+      if (this.DetectionResultColumns[barcodeColumn] == null) {
+        formatter += "    |   ";
+        continue;
+      }
+      var codeword = this.DetectionResultColumns[barcodeColumn].Codewords[codewordsRow];
+      if (codeword == null) {
+        formatter += "    |   ";
+        continue;
+      }
+      formatter += " {0}|{1}".format(FormatInteger(codeword.RowNumber, 3), FormatInteger(codeword.Value, 3));
     }
-    for (var codewordsRow = 0; codewordsRow < rowIndicatorColumn.Codewords.length; codewordsRow++) {
-        formatter += "CW {0}:".format(FormatInteger(codewordsRow, 3));
-        for (var barcodeColumn = 0; barcodeColumn < this.ColumnCount + 2; barcodeColumn++) {
-            if (this.DetectionResultColumns[barcodeColumn] == null) {
-                formatter += "    |   ";
-                continue;
-            }
-            var codeword = this.DetectionResultColumns[barcodeColumn].Codewords[codewordsRow];
-            if (codeword == null) {
-                formatter += "    |   ";
-                continue;
-            }
-            formatter += " {0}|{1}".format(FormatInteger(codeword.RowNumber, 3), FormatInteger(codeword.Value, 3));
-        }
-        formatter += "\n";
-    }
-    return formatter;
+    formatter += "\n";
+  }
+  return formatter;
 };
 
 
@@ -4419,13 +4425,13 @@ ZXing.PDF417.Internal.PDF417ScanningDecoder.adjustBoundingBox = function (rowInd
         missingStartRows--;
     }
     var missingEndRows = 0;
-    for (var row = rowHeights.length - 1; row >= 0; row--) {
+    for (row = rowHeights.length - 1; row >= 0; row--) {
         missingEndRows += maxRowHeight - rowHeights[row];
         if (rowHeights[row] > 0) {
             break;
         }
     }
-    for (var row = codewords.length - 1; missingEndRows > 0 && codewords[row] == null; row--) {
+    for (row = codewords.length - 1; missingEndRows > 0 && codewords[row] == null; row--) {
         missingEndRows--;
     }
     return rowIndicatorColumn.Box.addMissingRows(missingStartRows, missingEndRows, rowIndicatorColumn.IsLeft);
@@ -4537,12 +4543,11 @@ ZXing.PDF417.Internal.PDF417ScanningDecoder.createDecoderResultFromAmbiguousValu
         if (ambiguousIndexCount.length == 0) {
             return null;
         }
-        for (var i = 0; i < ambiguousIndexCount.length; i++) {
+        for (i = 0; i < ambiguousIndexCount.length; i++) {
             if (ambiguousIndexCount[i] < ambiguousIndexValues[i].length - 1) {
                 ambiguousIndexCount[i]++;
                 break;
-            }
-            else {
+            } else {
                 ambiguousIndexCount[i] = 0;
                 if (i == ambiguousIndexCount.length - 1) {
                     return null;
@@ -4811,18 +4816,27 @@ ZXing.PDF417.Internal.PDF417ScanningDecoder.ToString = function (barcodeMatrix) 
 ZXing.PDF417.PDF417Reader = function () {
 };
 
+ZXing.PDF417.PDF417Reader.prototype.decode = function (image, hints) {
+    var results = ZXing.PDF417.PDF417Reader.decode(image, hints || null, false);
+    if (results.length == 0) {
+        return null;
+    }
+    else {
+        return results[0];
+    }
+};
 ZXing.PDF417.PDF417Reader.prototype.decodeMultiple = function (image, hints) {
     return ZXing.PDF417.PDF417Reader.decode(image, hints || null, true);
 };
 ZXing.PDF417.PDF417Reader.decode = function (image, hints, multiple, dr) {
     var results = [];
     var detectorResult = dr || ZXing.PDF417.Internal.Detector.detectSingle(image, hints, multiple);
-    if (detectorResult != null) {
+    if (detectorResult) {
         var pointsList = detectorResult.Points;
         for (var $i = 0, $n = pointsList.length ; $i < $n; $i++) {
             var points = pointsList[$i];
             var decoderResult = ZXing.PDF417.Internal.PDF417ScanningDecoder.decode(detectorResult.Bits, points[4], points[5], points[6], points[7], ZXing.PDF417.PDF417Reader.getMinCodewordWidth(points), ZXing.PDF417.PDF417Reader.getMaxCodewordWidth(points));
-            if (decoderResult == null) {
+            if (!decoderResult) {
                 continue;
             }
             var result = new ZXing.Result(decoderResult.Text, decoderResult.RawBytes, points, ZXing.BarcodeFormat.PDF_417);
@@ -4831,7 +4845,7 @@ ZXing.PDF417.PDF417Reader.decode = function (image, hints, multiple, dr) {
             var pdf417ResultMetadata = decoderResult.Other instanceof ZXing.PDF417.PDF417ResultMetadata || decoderResult.Other == null ? decoderResult.Other : (function () {
                 throw new Error("InvalidCastException");
             }());
-            if (pdf417ResultMetadata != null) {
+            if (pdf417ResultMetadata) {
                 //result.putMetadata(ZXing.ResultMetadataType.PDF417_EXTRA_METADATA, pdf417ResultMetadata);
                 result.putMetadata("PDF417_EXTRA_METADATA", pdf417ResultMetadata);
             }
@@ -4841,13 +4855,13 @@ ZXing.PDF417.PDF417Reader.decode = function (image, hints, multiple, dr) {
     return results;
 };
 ZXing.PDF417.PDF417Reader.getMaxWidth = function (p1, p2) {
-    if (p1 == null || p2 == null) {
+    if (!p1 || !p2) {
         return 0;
     }
     return Math.abs(p1.x - p2.x);
 };
 ZXing.PDF417.PDF417Reader.getMinWidth = function (p1, p2) {
-    if (p1 == null || p2 == null) {
+    if (!p1 || !p2) {
         return 2147483647;
     }
     return Math.abs(p1.x - p2.x);
