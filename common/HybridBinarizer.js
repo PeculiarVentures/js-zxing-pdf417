@@ -63,30 +63,32 @@ ZXing.Common.HybridBinarizer.prototype.binarizeEntireImage = function () {
     }
 };
 ZXing.Common.HybridBinarizer.calculateThresholdForBlock = function (luminances, subWidth, subHeight, width, height, blackPoints, matrix) {
+    var maxYOffset = height - 8;
+    var maxXOffset = width - 8;
+    var top, yoffset, xoffset, left, sum, blackRow, average;
+
     for (var y = 0; y < subHeight; y++) {
-        var yoffset = y << 3;
-        var maxYOffset = height - 8;
+        yoffset = y << 3;
         if (yoffset > maxYOffset) {
             yoffset = maxYOffset;
         }
+        top = ZXing.Common.HybridBinarizer.cap(y, 2, subHeight - 3);
         for (var x = 0; x < subWidth; x++) {
-            var xoffset = x << 3;
-            var maxXOffset = width - 8;
+            xoffset = x << 3;
             if (xoffset > maxXOffset) {
                 xoffset = maxXOffset;
             }
-            var left = ZXing.Common.HybridBinarizer.cap(x, 2, subWidth - 3);
-            var top = ZXing.Common.HybridBinarizer.cap(y, 2, subHeight - 3);
-            var sum = 0;
+            left = ZXing.Common.HybridBinarizer.cap(x, 2, subWidth - 3);
+            sum = 0;
             for (var z = -2; z <= 2; z++) {
-                var blackRow = blackPoints[top + z];
+                blackRow = blackPoints[top + z];
                 sum += blackRow[left - 2];
                 sum += blackRow[left - 1];
                 sum += blackRow[left];
                 sum += blackRow[left + 1];
                 sum += blackRow[left + 2];
             }
-            var average = Math.floor(sum / 25);
+            average = Math.floor(sum / 25);
             ZXing.Common.HybridBinarizer.thresholdBlock(luminances, xoffset, yoffset, average, width, matrix);
         }
     }
@@ -96,27 +98,29 @@ ZXing.Common.HybridBinarizer.cap = function (value, min, max) {
 };
 ZXing.Common.HybridBinarizer.thresholdBlock = function (luminances, xoffset, yoffset, threshold, stride, matrix) {
     var offset = (yoffset * stride) + xoffset;
+    var pixel;
+
     for (var y = 0; y < 8; y++, offset += stride) {
         for (var x = 0; x < 8; x++) {
-            var pixel = luminances[offset + x] & 255;
+            pixel = luminances[offset + x] & 255;
             matrix.set_Item(xoffset + x, yoffset + y, (pixel <= threshold));
         }
     }
 };
 ZXing.Common.HybridBinarizer.calculateBlackPoints = function (luminances, subWidth, subHeight, width, height) {
     var blackPoints = new Array(subHeight);
+    var maxYOffset = height - 8;
+    var maxXOffset = width - 8;
     for (var i = 0; i < subHeight; i++) {
         blackPoints[i] = new Int32Array(subWidth);
     }
     for (var y = 0; y < subHeight; y++) {
         var yoffset = y << 3;
-        var maxYOffset = height - 8;
         if (yoffset > maxYOffset) {
             yoffset = maxYOffset;
         }
         for (var x = 0; x < subWidth; x++) {
             var xoffset = x << 3;
-            var maxXOffset = width - 8;
             if (xoffset > maxXOffset) {
                 xoffset = maxXOffset;
             }
