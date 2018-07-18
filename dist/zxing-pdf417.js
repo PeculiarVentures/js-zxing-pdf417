@@ -2029,15 +2029,45 @@ ZXing.Common.HybridBinarizer.calculateThresholdForBlock = function (luminances, 
             }
             left = ZXing.Common.HybridBinarizer.cap(x, 2, subWidth - 3);
             sum = 0;
+            var min = 256;
+            var max = -1;
+            var values = [];
             for (var z = -2; z <= 2; z++) {
                 blackRow = blackPoints[top + z];
+                min = Math.min(min, blackRow[left - 2], blackRow[left - 1], blackRow[left], blackRow[left + 1], blackRow[left + 2]);
+                max = Math.max(max, blackRow[left - 2], blackRow[left - 1], blackRow[left], blackRow[left + 1], blackRow[left + 2]);
                 sum += blackRow[left - 2];
                 sum += blackRow[left - 1];
                 sum += blackRow[left];
                 sum += blackRow[left + 1];
                 sum += blackRow[left + 2];
+             
+                values.push(blackRow[left - 2]);
+                values.push(blackRow[left - 1]);
+                values.push(blackRow[left]);
+                values.push(blackRow[left + 1]);
+                values.push(blackRow[left + 2]);
             }
             average = Math.floor(sum / 25);
+            var sqrDiff = values.map(function(value){
+              var diff = value - average;
+              var sqr = diff * diff;
+              return sqr;
+            })
+
+            function aveg(data){
+              var sum = data.reduce(function(sum, value){
+                return sum + value;
+              }, 0);
+
+              var avg = sum / data.length;
+              return avg;
+            }
+
+            var std = Math.sqrt(aveg(sqrDiff))
+
+            var threshold = Math.min(min + std, average, max - std)
+ 
             ZXing.Common.HybridBinarizer.thresholdBlock(luminances, xoffset, yoffset, average, width, matrix);
         }
     }
@@ -2052,7 +2082,8 @@ ZXing.Common.HybridBinarizer.thresholdBlock = function (luminances, xoffset, yof
     for (var y = 0; y < 8; y++, offset += stride) {
         for (var x = 0; x < 8; x++) {
             pixel = luminances[offset + x] & 255;
-            matrix.set_Item(xoffset + x, yoffset + y, (pixel <= threshold));
+            black = (pixel <= threshold)
+            matrix.set_Item(xoffset + x, yoffset + y, black);
         }
     }
 };
