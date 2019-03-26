@@ -75,10 +75,10 @@ ZXing.PDF417.PDF417Reader.getMinWidth = function (p1, p2) {
     return Math.abs(p1.x - p2.x);
 };
 ZXing.PDF417.PDF417Reader.getMaxCodewordWidth = function (p) {
-    return Math.max(Math.max(ZXing.PDF417.PDF417Reader.getMaxWidth(p[0], p[4]), ZXing.PDF417.PDF417Reader.getMaxWidth(p[6], p[2]) * Math.floor(ZXing.PDF417.PDF417Common.MODULES_IN_CODEWORD / ZXing.PDF417.PDF417Common.MODULES_IN_STOP_PATTERN)), Math.max(ZXing.PDF417.PDF417Reader.getMaxWidth(p[1], p[5]), ZXing.PDF417.PDF417Reader.getMaxWidth(p[7], p[3]) * Math.floor(ZXing.PDF417.PDF417Common.MODULES_IN_CODEWORD / ZXing.PDF417.PDF417Common.MODULES_IN_STOP_PATTERN)));
+    return Math.max(Math.max(ZXing.PDF417.PDF417Reader.getMaxWidth(p[0], p[4]), Math.floor(ZXing.PDF417.PDF417Reader.getMaxWidth(p[6], p[2]) * ZXing.PDF417.PDF417Common.MODULES_IN_CODEWORD / ZXing.PDF417.PDF417Common.MODULES_IN_STOP_PATTERN)), Math.max(ZXing.PDF417.PDF417Reader.getMaxWidth(p[1], p[5]), Math.floor(ZXing.PDF417.PDF417Reader.getMaxWidth(p[7], p[3]) * ZXing.PDF417.PDF417Common.MODULES_IN_CODEWORD / ZXing.PDF417.PDF417Common.MODULES_IN_STOP_PATTERN)));
 };
 ZXing.PDF417.PDF417Reader.getMinCodewordWidth = function (p) {
-    return Math.min(Math.min(ZXing.PDF417.PDF417Reader.getMinWidth(p[0], p[4]), ZXing.PDF417.PDF417Reader.getMinWidth(p[6], p[2]) * Math.floor(ZXing.PDF417.PDF417Common.MODULES_IN_CODEWORD / ZXing.PDF417.PDF417Common.MODULES_IN_STOP_PATTERN)), Math.min(ZXing.PDF417.PDF417Reader.getMinWidth(p[1], p[5]), ZXing.PDF417.PDF417Reader.getMinWidth(p[7], p[3]) * Math.floor(ZXing.PDF417.PDF417Common.MODULES_IN_CODEWORD / ZXing.PDF417.PDF417Common.MODULES_IN_STOP_PATTERN)));
+    return Math.min(Math.min(ZXing.PDF417.PDF417Reader.getMinWidth(p[0], p[4]), Math.floor(ZXing.PDF417.PDF417Reader.getMinWidth(p[6], p[2]) * ZXing.PDF417.PDF417Common.MODULES_IN_CODEWORD / ZXing.PDF417.PDF417Common.MODULES_IN_STOP_PATTERN)), Math.min(ZXing.PDF417.PDF417Reader.getMinWidth(p[1], p[5]), Math.floor(ZXing.PDF417.PDF417Reader.getMinWidth(p[7], p[3]) * ZXing.PDF417.PDF417Common.MODULES_IN_CODEWORD / ZXing.PDF417.PDF417Common.MODULES_IN_STOP_PATTERN)));
 };
 ZXing.PDF417.PDF417Reader.prototype.reset = function () {
 };
